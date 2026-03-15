@@ -1,0 +1,27 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>青蛙守卫池塘 v4 稳定重写版</title>
+<link rel="stylesheet" href="css/frog_game.css">
+</head>
+<body>
+<div class="wrap">
+  <h2>🐸 青蛙守卫池塘 v4 稳定重写版</h2>
+  <div id="ui">
+    <div class="card">分数<br><strong id="score">0</strong></div>
+    <div class="card">生命<br><strong id="lives">5</strong></div>
+    <div class="card">最高分<br><strong id="best">0</strong></div>
+    <div class="card">连击<br><strong id="combo">0</strong></div>
+    <div class="card">关卡<br><strong id="wave">1</strong></div>
+  </div>
+  <div id="tips">键盘：↑ ↓ ← → 或 W A S D 移动，空格发射。鼠标：移动提供温和牵引，按住左键自动吐泡泡。<br>这版把“控制系统”完全重写：键盘是主控，鼠标只是辅助，不再出现加速度失控。</div>
+  <canvas id="game" width="920" height="580" tabindex="0"></canvas>
+  <div class="footer">提示：Boss 被击败后可按 Enter 或点击按钮重开；本版优先稳定手感。</div>
+</div>
+
+<script src="js/frog_game.js"></script>
+</body>
+</html>
