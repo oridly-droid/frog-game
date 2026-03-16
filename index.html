@@ -1,157 +1,164 @@
 <!DOCTYPE html>
-<!-- AI_WRITE_TEST_OK -->
-<!-- AI_WRITE_TEST_OK_2 -->
 <html lang="zh">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="青蛙守卫池塘">
-<meta name="theme-color" content="#163627">
-<meta property="og:title" content="青蛙守卫池塘 Mobile">
-<meta property="og:description" content="左摇杆移动、自动吐泡泡的手机小游戏。">
-<meta property="og:type" content="website">
-<title>青蛙守卫池塘 Mobile v2 左摇杆版</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="theme-color" content="#163627" />
+<title>青蛙守卫池塘 Mobile 稳定版</title>
 <style>
-  * { box-sizing: border-box; }
-  body {
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
     margin: 0;
-    min-height: 100vh;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 0;
     background:
       radial-gradient(circle at top, rgba(130,255,170,0.12), transparent 35%),
       linear-gradient(180deg, #163627 0%, #08120e 100%);
-    color: white;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    text-align: center;
-    overflow: hidden;
-    touch-action: manipulation;
-    -webkit-user-select: none;
+    color: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
     user-select: none;
+    touch-action: manipulation;
   }
   .wrap {
     width: 100%;
     max-width: 100%;
     margin: 0 auto;
-    padding: 8px 8px 14px;
+    padding: max(4px, env(safe-area-inset-top)) 6px max(6px, env(safe-area-inset-bottom));
+    text-align: center;
   }
   h2 {
-    margin: 10px 0 6px;
-    letter-spacing: 0.5px;
-    font-size: 20px;
-    text-shadow: 0 0 18px rgba(180,255,200,0.25);
+    margin: 2px 0 4px;
+    font-size: 16px;
+    letter-spacing: 0.2px;
+    text-shadow: 0 0 12px rgba(180,255,200,0.18);
   }
   #ui {
-    margin: 6px auto 8px;
+    margin: 4px auto 4px;
     display: flex;
     justify-content: center;
-    gap: 8px;
+    gap: 4px;
     flex-wrap: wrap;
-    font-size: 13px;
+    font-size: 10px;
   }
   .card {
-    min-width: 88px;
-    padding: 6px 8px;
+    min-width: 62px;
+    padding: 4px 6px;
     background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 12px;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 10px;
     backdrop-filter: blur(8px);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
   }
   #tips {
-    opacity: 0.9;
-    margin-bottom: 8px;
-    font-size: 12px;
-    line-height: 1.45;
+    opacity: 0.82;
+    margin-bottom: 4px;
+    font-size: 10px;
+    line-height: 1.3;
     padding: 0 6px;
+  }
+  #gameShell {
+    position: relative;
+    width: fit-content;
+    margin: 0 auto;
   }
   canvas {
     display: block;
-    width: min(100vw - 12px, 920px);
+    width: min(100vw - 8px, 920px);
     height: auto;
-    margin: 0 auto 10px;
-    background: linear-gradient(180deg, #65b873 0%, #214735 48%, #13261e 100%);
+    margin: 0 auto 2px;
+    background: linear-gradient(180deg, #74c97f 0%, #285140 45%, #12251c 100%);
     border: 2px solid #7dd3fc;
     border-radius: 14px;
-    box-shadow:
-      0 10px 24px rgba(0,0,0,0.34),
-      0 0 24px rgba(125, 211, 252, 0.07);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.34), 0 0 24px rgba(125,211,252,0.08);
     outline: none;
     touch-action: none;
-  }
-  .footer {
-    opacity: 0.75;
-    font-size: 11px;
-    padding: 0 8px;
+    pointer-events: none;
   }
   #mobileControls {
-    width: min(100vw - 12px, 920px);
-    margin: 0 auto;
+    position: absolute;
+    inset: 0;
+    z-index: 30;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    padding: 2px 4px 12px;
+    padding: 0 12px 10px;
     pointer-events: none;
   }
   #leftPad {
-    width: 130px;
-    height: 130px;
+    width: 96px;
+    height: 96px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.08);
-    position: relative;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.10);
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
     pointer-events: auto;
     touch-action: none;
-    box-shadow: inset 0 0 18px rgba(255,255,255,0.05);
+    box-shadow: inset 0 0 18px rgba(255,255,255,0.05), 0 4px 18px rgba(0,0,0,0.22);
   }
   #leftStick {
-    width: 58px;
-    height: 58px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
     position: absolute;
-    left: 36px;
-    top: 36px;
-    background: rgba(180,255,220,0.22);
-    border: 1px solid rgba(255,255,255,0.16);
-    box-shadow: 0 0 18px rgba(160,255,210,0.12);
+    left: 27px;
+    top: 27px;
+    background: rgba(180,255,220,0.26);
+    border: 1px solid rgba(255,255,255,0.18);
+    box-shadow: 0 0 18px rgba(160,255,210,0.14);
   }
   #rightPadHint {
-    min-width: 120px;
+    min-width: 84px;
+    position: absolute;
+    right: 12px;
+    bottom: 14px;
     text-align: right;
-    opacity: 0.72;
+    opacity: 0.82;
     font-size: 11px;
-    line-height: 1.35;
-    padding-bottom: 6px;
+    line-height: 1.15;
+    padding-bottom: 2px;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.35);
   }
-  #startOverlay {
+  .footer {
+    opacity: 0.56;
+    font-size: 9px;
+    padding: 0 6px;
+  }
+
+  #startOverlay, #chapterOverlay {
     position: fixed;
     inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: radial-gradient(circle at 50% 20%, rgba(160,255,190,0.14), rgba(0,0,0,0.78));
-    backdrop-filter: blur(8px);
-    z-index: 30;
+    z-index: 40;
     padding: 18px;
+    background: radial-gradient(circle at 50% 20%, rgba(160,255,190,0.14), rgba(0,0,0,0.80));
+    backdrop-filter: blur(8px);
   }
-  #startCard {
+  #startCard, #chapterCard {
     width: min(92vw, 420px);
     border-radius: 22px;
-    background: rgba(10,28,22,0.82);
+    background: rgba(10,28,22,0.86);
     border: 1px solid rgba(255,255,255,0.10);
     box-shadow: 0 18px 50px rgba(0,0,0,0.38);
     padding: 22px 18px 18px;
   }
-  #startTitle {
+  #startTitle, #chapterTitle {
     font-size: 24px;
     font-weight: 800;
     margin-bottom: 8px;
     text-shadow: 0 0 18px rgba(180,255,200,0.22);
   }
-  #startDesc {
-    opacity: 0.9;
+  #startDesc, #chapterDesc {
+    opacity: 0.92;
     font-size: 13px;
-    line-height: 1.55;
+    line-height: 1.6;
     margin-bottom: 14px;
   }
   .startTagRow {
@@ -169,7 +176,7 @@
     font-size: 12px;
     opacity: 0.92;
   }
-  #startButton {
+  #startButton, #chapterButton {
     width: 100%;
     border: none;
     border-radius: 14px;
@@ -186,130 +193,333 @@
     font-size: 11px;
     line-height: 1.45;
   }
-  .hidden {
-    display: none !important;
+
+  #devToggle {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.7);
+    font-size: 14px;
+    z-index: 35;
+    backdrop-filter: blur(8px);
+  }
+  #devPanel {
+    position: fixed;
+    top: 48px;
+    right: 10px;
+    width: 168px;
+    padding: 10px;
+    border-radius: 14px;
+    background: rgba(7,18,14,0.88);
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.28);
+    z-index: 36;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    text-align: left;
+  }
+  #devPanelTitle {
+    font-size: 11px;
+    opacity: 0.72;
+    letter-spacing: 0.3px;
+  }
+  .devBtn {
+    border: none;
+    border-radius: 10px;
+    padding: 9px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    background: rgba(255,255,255,0.10);
+    color: white;
+    text-align: left;
+  }
+
+  #evoBanner {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 220px;
+    max-width: 78vw;
+    padding: 16px 18px;
+    border-radius: 18px;
+    background: rgba(8,28,22,0.45);
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+    backdrop-filter: blur(4px);
+    z-index: 45;
+    text-align: center;
+    pointer-events: none;
+    opacity: 0.85;
+  }
+  #evoTitle {
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 6px;
+    text-shadow: 0 0 18px rgba(180,255,200,0.22);
+  }
+  #evoSub {
+    font-size: 13px;
+    opacity: 0.88;
+    line-height: 1.45;
+  }
+  .hidden { display: none !important; }
+  #rotateOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: radial-gradient(circle at center, rgba(0,0,0,0.75), rgba(0,0,0,0.92));
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 1px;
   }
 </style>
 </head>
 <body>
+<div id="rotateOverlay" class="hidden">📱 请横屏游戏</div>
 <div id="startOverlay">
   <div id="startCard">
     <div id="startTitle">🐸 青蛙守卫池塘</div>
-    <div id="startDesc">手机试玩版已经就绪。左下角摇杆负责移动，青蛙会自动朝前方吐泡泡。现在先保留轻量操作，优先让手感稳定。</div>
+    <div id="startDesc">水底章节稳定版已完成。左下角摇杆移动，自动吐泡泡，三段 Boss 战结束后会播放过场并返回开头。</div>
     <div class="startTagRow">
       <div class="startTag">左摇杆移动</div>
       <div class="startTag">自动吐泡泡</div>
-      <div class="startTag">手机试玩版</div>
+      <div class="startTag">三段 Boss 战</div>
     </div>
-    <button id="startButton">开始游戏</button>
-    <div id="startMini">提示：如果你把网页添加到手机主屏幕，打开后会更像一个真正的小游戏。</div>
+    <button id="startButton" type="button">开始游戏</button>
+    <div id="startMini">建议：用手机横屏测试，体验会更自然。</div>
   </div>
 </div>
+
+<button id="devToggle" type="button">≡</button>
+<div id="devPanel" class="hidden">
+  <div id="devPanelTitle">开发测试</div>
+  <button id="devInvincible" class="devBtn" type="button">无敌：关闭</button>
+  <button id="devAdd100" class="devBtn" type="button">+100 分</button>
+  <button id="devTo500" class="devBtn" type="button">跳到 500 分</button>
+  <button id="devTo1000" class="devBtn" type="button">跳到 1000 分</button>
+</div>
+
+<div id="evoBanner" class="hidden">
+  <div id="evoTitle">🐸 前腿觉醒</div>
+  <div id="evoSub">三路扩散泡泡已解锁</div>
+</div>
+
+<div id="chapterOverlay" class="hidden">
+  <div id="chapterCard">
+    <div id="chapterTitle">🌊 水底章节完成</div>
+    <div id="chapterDesc">池塘三段 Boss 已全部击败。<br>陆地系统开放中，请期待。</div>
+    <button id="chapterButton" type="button">返回开头</button>
+  </div>
+</div>
+
+<div id="gameOverOverlay" class="hidden">
+  <div id="chapterCard">
+    <div id="chapterTitle">💀 挑战失败</div>
+    <div id="chapterDesc">本轮池塘守卫失败。<br>可以重新挑战，或返回开头继续测试。</div>
+    <button id="restartButton" type="button">重新挑战</button>
+    <button id="backToMenuButton" type="button" style="margin-top:10px;background:rgba(255,255,255,0.10);color:#fff;box-shadow:none;">返回开头</button>
+  </div>
+</div>
+
 <div class="wrap">
-  <h2>🐸 青蛙守卫池塘 Mobile v2 左摇杆版</h2>
+  <h2>🐸 青蛙守卫池塘 Mobile 稳定版</h2>
   <div id="ui">
     <div class="card">分数<br><strong id="score">0</strong></div>
-    <div class="card">生命<br><strong id="lives">5</strong></div>
+    <div class="card">生命<br><strong id="lives">20</strong></div>
     <div class="card">最高分<br><strong id="best">0</strong></div>
     <div class="card">连击<br><strong id="combo">0</strong></div>
-    <div class="card">关卡<br><strong id="wave">1</strong></div>
-    <div class="card">冲刺<br><strong id="dash">就绪</strong></div>
+    <div class="card">阶段<br><strong id="wave">1</strong></div>
+    <div class="card">Boss<br><strong id="bossProgress">0/3</strong></div>
   </div>
-  <div id="tips">手机版第 3 步：左摇杆移动 + 自动吐泡泡已启用。已优化摇杆起步响应；Boss 现在会更晚出现，而且更容易被击败。</div>
-  <canvas id="game" width="920" height="580" tabindex="0"></canvas>
-  <div id="mobileControls">
-    <div id="leftPad">
-      <div id="leftStick"></div>
+  <div id="tips">手机版第 4 步：水底章节稳定版已完成。三段 Boss 战结束后会进入过场动画，并返回章节起点，方便手机继续测试。</div>
+  <div id="gameShell">
+    <canvas id="game" width="920" height="580" tabindex="0"></canvas>
+    <div id="mobileControls">
+      <div id="leftPad"><div id="leftStick"></div></div>
+      <div id="rightPadHint">当前阶段：<br>左摇杆移动已启用<br>移动后战斗开始</div>
     </div>
-    <div id="rightPadHint">当前阶段：<br>左摇杆移动已启用<br>自动吐泡泡已启用</div>
   </div>
-  <div class="footer">提示：Boss 被击败后可按 Enter 或点击按钮重开；本版优先稳定手感。</div>
+  <div class="footer">提示：第三个 Boss 被击败后，水底章节完成。</div>
 </div>
 
 <script>
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
+const W = canvas.width;
+const H = canvas.height;
+
+const startOverlay = document.getElementById("startOverlay");
+const rotateOverlay = document.getElementById("rotateOverlay");
+const startButton = document.getElementById("startButton");
+const chapterOverlay = document.getElementById("chapterOverlay");
+const chapterButton = document.getElementById("chapterButton");
+const gameOverOverlay = document.getElementById("gameOverOverlay");
+const restartButton = document.getElementById("restartButton");
+const backToMenuButton = document.getElementById("backToMenuButton");
+
+const devToggle = document.getElementById("devToggle");
+const devPanel = document.getElementById("devPanel");
+const devInvincibleBtn = document.getElementById("devInvincible");
+const devAdd100Btn = document.getElementById("devAdd100");
+const devTo500Btn = document.getElementById("devTo500");
+const devTo1000Btn = document.getElementById("devTo1000");
+
+const evoBanner = document.getElementById("evoBanner");
+const evoTitle = document.getElementById("evoTitle");
+const evoSub = document.getElementById("evoSub");
+
 const leftPad = document.getElementById("leftPad");
 const leftStick = document.getElementById("leftStick");
-const startOverlay = document.getElementById("startOverlay");
-const startButton = document.getElementById("startButton");
 
 const scoreEl = document.getElementById("score");
 const livesEl = document.getElementById("lives");
 const bestEl = document.getElementById("best");
 const comboEl = document.getElementById("combo");
 const waveEl = document.getElementById("wave");
-const dashEl = document.getElementById("dash");
+const bossProgressEl = document.getElementById("bossProgress");
+const wrapEl = document.querySelector(".wrap");
+const titleEl = document.querySelector("h2");
+const uiEl = document.getElementById("ui");
+const tipsEl = document.getElementById("tips");
+const footerEl = document.querySelector(".footer");
+const rightPadHint = document.getElementById("rightPadHint");
 
-const W = canvas.width;
-const H = canvas.height;
+let bestScore = Number(localStorage.getItem("frog_best_score_stable") || 0);
 
-let bestScore = Number(localStorage.getItem("frog_best_score_v4") || 0);
-bestEl.innerText = bestScore;
+const frog = { x: 120, y: 280, w: 46, h: 46, speed: 5.1 };
+const bullets = [];
+const enemies = [];
+const enemyBullets = [];
+const particles = [];
+const powerUps = [];
+const ripples = [];
+const wakes = [];
+
+const keys = {};
+const pointer = { active: false, down: false, x: 0, y: 0 };
+const joystick = { active: false, touchId: null, baseX: 0, baseY: 0, dx: 0, dy: 0, max: 60 };
+
+let started = false;
+let battleActivated = false;
+let gameOver = false;
+let chapterCleared = false;
+let chapterClearStartedAt = 0;
 
 let score = 0;
 let combo = 0;
 let comboTimer = 0;
-let lives = 5;
+let lives = 20;
 let wave = 1;
-let gameOver = false;
-let bossTriggered = false;
-let pendingRestart = false;
-let autoFire = true;
-let flashTimer = 0;
-let lastShot = 0;
+
+let frogStage = 0;
+let invincibleMode = false;
+let evoBannerUntil = 0;
+let forelegShotAnimUntil = 0;
+
+let autoFire = false;
 let spawnTimer = 0;
-let wingmanUntil = 0;
-let boss = null;
+let lastShot = 0;
+let flashTimer = 0;
 let screenShake = 0;
-let slowMoTimer = 0;
-let slowMoFrameToggle = false;
 let hitFlash = 0;
-let dashUntil = 0;
-let dashCooldownUntil = 0;
-let dashVX = 0;
-let dashVY = 0;
-let lastMoveX = 1;
-let lastMoveY = 0;
-let lastDashDirX = 1;
-let lastDashDirY = 0;
-let lastAimX = 1;
-let lastAimY = 0;
 
-const keys = {};
-const bullets = [];
-const enemyBullets = [];
-const enemies = [];
-const particles = [];
-const powerUps = [];
-const ripples = [];
-const stars = [];
-const fireflies = [];
-const waterBands = [];
-const pondSpecks = [];
-const mistBands = [];
-const fishShadows = [];
-const pondBubbles = [];
-const lilyPads = [];
-const wakes = [];
-let lastFrogWakeAt = 0;
-let started = false;
+let boss = null;
+let bossStage = 0;
+let bossTriggered = false;
+let bossDefeated = false;
+let bossCooldownUntil = 0;
 
-const pointer = {
-  active: false,
-  x: 120,
-  y: 280
-};
+let wingmanUntil = 0;
+let wingmanAngle = 0;
+let wingmanWarningUntil = 0;
 
-const joystick = {
-  active: false,
-  touchId: null,
-  baseX: 0,
-  baseY: 0,
-  dx: 0,
-  dy: 0,
-  max: 60
-};
+
+function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+
+function resizeCanvasForFullscreen() {
+  // 如果手机竖屏，提示用户横屏
+  if (window.innerHeight > window.innerWidth) {
+    rotateOverlay.classList.remove("hidden");
+  } else {
+    rotateOverlay.classList.add("hidden");
+  }
+
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const ratio = 920 / 580;
+
+  const inBattle = started && !startOverlay.classList.contains("hidden") === false;
+
+  let width, height;
+
+  if (inBattle) {
+    // 战斗时：直接吃满手机可视区域，优先解决右侧留白
+    width = vw - 4;
+    height = vh - 18;
+  } else {
+    // 菜单时：保守布局
+    width = vw - 8;
+    height = width / ratio;
+
+    if (height > vh * 0.72) {
+      height = vh * 0.72;
+      width = height * ratio;
+    }
+  }
+
+  canvas.style.width = width + "px";
+  canvas.style.height = height + "px";
+  const shell = document.getElementById("gameShell");
+  if (shell) {
+    shell.style.width = width + "px";
+    shell.style.height = height + "px";
+  }
+}
+
+function tryEnterFullscreen() {
+  const el = document.documentElement;
+  if (el.requestFullscreen) {
+    el.requestFullscreen().catch(() => {});
+  } else if (el.webkitRequestFullscreen) {
+    el.webkitRequestFullscreen();
+  }
+
+  // 尝试锁定横屏（支持的浏览器会生效）
+  if (screen.orientation && screen.orientation.lock) {
+    screen.orientation.lock("landscape").catch(() => {});
+  }
+
+  // 尝试隐藏地址栏（移动端）
+  setTimeout(() => {
+    window.scrollTo(0, 1);
+    resizeCanvasForFullscreen();
+  }, 60);
+}
+
+function resetJoystick() {
+  joystick.active = false;
+  joystick.touchId = null;
+  joystick.dx = 0;
+  joystick.dy = 0;
+  leftStick.style.left = "27px";
+  leftStick.style.top = "27px";
+}
+
+function updateLeftStickVisual() {
+  leftStick.style.left = `${27 + joystick.dx}px`;
+  leftStick.style.top = `${27 + joystick.dy}px`;
+}
 
 function getCanvasPos(clientX, clientY) {
   const rect = canvas.getBoundingClientRect();
@@ -319,147 +529,30 @@ function getCanvasPos(clientX, clientY) {
   };
 }
 
-const frog = {
-  x: 120,
-  y: 280,
-  w: 44,
-  h: 44,
-  baseSpeed: 5.2,
-  assistStrength: 0.28
-};
-
-function seedScene() {
-  for (let i = 0; i < 26; i++) {
-    stars.push({
-      x: (i * 37) % W,
-      y: 15 + (i * 23) % 150,
-      r: 1 + (i % 3),
-      phase: Math.random() * Math.PI * 2
-    });
-  }
-  for (let i = 0; i < 10; i++) {
-    fireflies.push({
-      x: Math.random() * W,
-      y: 30 + Math.random() * 180,
-      s: 0.5 + Math.random(),
-      phase: Math.random() * Math.PI * 2
-    });
-  }
-  for (let i = 0; i < 8; i++) {
-    waterBands.push({
-      y: 110 + i * 52,
-      phase: Math.random() * Math.PI * 2,
-      speed: 0.6 + Math.random() * 0.8,
-      width: 120 + Math.random() * 120
-    });
-  }
-  for (let i = 0; i < 28; i++) {
-    pondSpecks.push({
-      x: Math.random() * W,
-      y: 90 + Math.random() * (H - 140),
-      r: 1 + Math.random() * 2.2,
-      speed: 0.25 + Math.random() * 0.5,
-      phase: Math.random() * Math.PI * 2
-    });
-  }
-  for (let i = 0; i < 5; i++) {
-    mistBands.push({
-      y: 80 + i * 92,
-      width: 180 + Math.random() * 140,
-      speed: 0.18 + Math.random() * 0.16,
-      alpha: 0.035 + Math.random() * 0.03,
-      phase: Math.random() * Math.PI * 2
-    });
-  }
-  // Seed fish shadows
-  for (let i = 0; i < 6; i++) {
-    fishShadows.push({
-      x: Math.random() * W,
-      y: 140 + Math.random() * (H - 200),
-      speed: 0.3 + Math.random() * 0.4,
-      size: 12 + Math.random() * 10,
-      phase: Math.random() * Math.PI * 2
-    });
-  }
-
-  // Seed pond bubbles
-  for (let i = 0; i < 10; i++) {
-    pondBubbles.push({
-      x: Math.random() * W,
-      y: 120 + Math.random() * (H - 160),
-      r: 2 + Math.random() * 3,
-      speed: 0.4 + Math.random() * 0.6,
-      phase: Math.random() * Math.PI * 2
-    });
-  }
-  for (let i = 0; i < 7; i++) {
-    lilyPads.push({
-      x: 90 + Math.random() * (W - 180),
-      y: 120 + Math.random() * (H - 180),
-      r: 18 + Math.random() * 10,
-      drift: 0.12 + Math.random() * 0.18,
-      phase: Math.random() * Math.PI * 2,
-      cut: -0.3 + Math.random() * 0.6
-    });
-  }
-}
-seedScene();
-
-function updateUI() {
-  scoreEl.innerText = score;
-  livesEl.innerText = lives;
-  bestEl.innerText = bestScore;
-  comboEl.innerText = combo;
-  waveEl.innerText = wave;
-  const now = performance.now();
-  dashEl.innerText = dashCooldownUntil <= now ? "就绪" : `${((dashCooldownUntil - now) / 1000).toFixed(1)}s`;
-}
-
-function saveBestScore() {
-  if (score > bestScore) {
-    bestScore = score;
-    localStorage.setItem("frog_best_score_v4", String(bestScore));
-  }
-  updateUI();
-}
-
-function clamp(v, min, max) {
-  return Math.max(min, Math.min(max, v));
-}
-
-function updateLeftStickVisual() {
-  leftStick.style.left = `${36 + joystick.dx}px`;
-  leftStick.style.top = `${36 + joystick.dy}px`;
-}
-
-function resetJoystick() {
-  joystick.active = false;
-  joystick.touchId = null;
-  joystick.dx = 0;
-  joystick.dy = 0;
-  updateLeftStickVisual();
-}
-
 function applyJoystickFromTouch(touch) {
   const rawDx = touch.clientX - joystick.baseX;
   const rawDy = touch.clientY - joystick.baseY;
   const len = Math.hypot(rawDx, rawDy) || 1;
   const limit = joystick.max;
-  const deadZone = 1;
-
-  if (len <= deadZone) {
-    joystick.dx = 0;
-    joystick.dy = 0;
-  } else {
-    const nx = rawDx / len;
-    const ny = rawDy / len;
-    const mag = Math.min(1, (len - deadZone) / (limit - deadZone));
-    const boosted = Math.min(1, 0.18 + mag * 1.22);
-    joystick.dx = nx * boosted * limit;
-    joystick.dy = ny * boosted * limit;
-  }
-
+  const mag = Math.min(1, len / limit);
+  joystick.dx = (rawDx / len) * mag * limit;
+  joystick.dy = (rawDy / len) * mag * limit;
   updateLeftStickVisual();
+}
+
+function addBurst(x, y, color = "#ffd166", count = 8) {
+  for (let i = 0; i < count; i++) {
+    const a = (Math.PI * 2 * i) / count + Math.random() * 0.5;
+    const speed = 1 + Math.random() * 2.4;
+    particles.push({
+      x, y,
+      vx: Math.cos(a) * speed,
+      vy: Math.sin(a) * speed,
+      life: 18 + Math.random() * 16,
+      color,
+      size: 1.5 + Math.random() * 2.0
+    });
+  }
 }
 
 function addRipple(x, y, color = "rgba(255,255,255,0.22)") {
@@ -467,149 +560,281 @@ function addRipple(x, y, color = "rgba(255,255,255,0.22)") {
 }
 
 function addWake(x, y, strength = 1, color = "rgba(210,245,255,0.18)") {
-  wakes.push({ x, y, r: 6 + strength * 2, alpha: 0.22 + strength * 0.08, grow: 1.0 + strength * 0.45, color });
+  wakes.push({ x, y, r: 6 + strength * 2, alpha: 0.24, grow: 1.0 + strength * 0.45, color });
 }
 
-function disturbPadsAndFish(x, y, radius = 90, force = 1) {
-  lilyPads.forEach(p => {
-    const dx = p.x - x;
-    const dy = p.y - y;
-    const dist = Math.hypot(dx, dy) || 1;
-    if (dist < radius) {
-      const push = (1 - dist / radius) * force * 6;
-      p.x += (dx / dist) * push;
-      p.y += (dy / dist) * push * 0.7;
-    }
-  });
-
-  fishShadows.forEach(f => {
-    const dx = f.x - x;
-    const dy = f.y - y;
-    const dist = Math.hypot(dx, dy) || 1;
-    if (dist < radius * 1.2) {
-      const panic = (1 - dist / (radius * 1.2)) * force * 2.6;
-      f.x += (dx / dist) * panic * 10;
-      f.y += (dy / dist) * panic * 4;
-      f.speed = Math.min(1.9, f.speed + panic * 0.18);
-    }
-  });
-}
-
-function addBurst(x, y, color = "#ffd166", count = 8) {
-  for (let i = 0; i < count; i++) {
-    const a = (Math.PI * 2 * i) / count + Math.random() * 0.7;
-    const speed = 1.2 + Math.random() * 2.6;
-    particles.push({
-      x, y,
-      vx: Math.cos(a) * speed,
-      vy: Math.sin(a) * speed,
-      life: 18 + Math.random() * 16,
-      color,
-      size: 1.6 + Math.random() * 1.8
-    });
+function saveBestScore() {
+  if (score > bestScore) {
+    bestScore = score;
+    localStorage.setItem("frog_best_score_stable", String(bestScore));
   }
 }
 
-function resetCombo() {
+function updateDevUI() {
+  devInvincibleBtn.innerText = invincibleMode ? "无敌：开启" : "无敌：关闭";
+}
+
+function updateUI() {
+  scoreEl.innerText = score;
+  livesEl.innerText = lives;
+  bestEl.innerText = bestScore;
+  comboEl.innerText = combo;
+  waveEl.innerText = wave;
+  bossProgressEl.innerText = `${Math.min(bossStage + (boss ? 1 : 0), 3)}/3`;
+}
+
+function setBattleLayout(isBattle) {
+  if (isBattle) {
+    titleEl.style.display = "none";
+    uiEl.style.display = "none";
+    tipsEl.style.display = "none";
+    footerEl.style.display = "none";
+    rightPadHint.style.display = "block";
+    rightPadHint.innerHTML = "左摇杆移动";
+    wrapEl.style.paddingTop = "0px";
+    wrapEl.style.paddingBottom = "0px";
+  } else {
+    titleEl.style.display = "block";
+    uiEl.style.display = "flex";
+    tipsEl.style.display = "block";
+    footerEl.style.display = "block";
+    rightPadHint.style.display = "block";
+    rightPadHint.innerHTML = "当前阶段：<br>左摇杆移动已启用<br>移动后战斗开始";
+    wrapEl.style.paddingTop = "max(4px, env(safe-area-inset-top))";
+    wrapEl.style.paddingBottom = "max(6px, env(safe-area-inset-bottom))";
+  }
+  resizeCanvasForFullscreen();
+}
+
+function showEvolutionBanner(title, sub, duration = 1100) {
+  evoTitle.innerText = title;
+  evoSub.innerText = sub;
+  evoBanner.classList.remove("hidden");
+  evoBannerUntil = performance.now() + duration;
+}
+
+function checkEvolution() {
+  const now = performance.now();
+  if (score >= 80 && frogStage === 0) {
+    frogStage = 1;
+    forelegShotAnimUntil = now + 260;
+    screenShake = 8;
+    hitFlash = 6;
+    addBurst(frog.x + frog.w / 2, frog.y + frog.h / 2, "#9ff7c2", 22);
+    showEvolutionBanner("🐸 前腿觉醒", "三路扩散泡泡已解锁");
+  }
+  if (score >= 160 && frogStage === 1) {
+    frogStage = 2;
+    screenShake = 10;
+    hitFlash = 8;
+    addBurst(frog.x + frog.w / 2, frog.y + frog.h / 2, "#7dd3fc", 28);
+    showEvolutionBanner("🐸 后腿觉醒", "后腿形态已解锁，第三个 Boss 更好打了");
+  }
+}
+
+function applyScoreDelta(delta) {
+  score += delta;
+  if (score < 0) score = 0;
+  if (score > wave * 20) wave = Math.min(9, 1 + Math.floor(score / 20));
+  checkEvolution();
+  saveBestScore();
+  updateUI();
+}
+
+function setScoreForTesting(target) {
+  score = Math.max(score, target);
+  if (score > wave * 20) wave = Math.min(9, 1 + Math.floor(score / 20));
+  checkEvolution();
+  saveBestScore();
+  updateUI();
+}
+
+function resetRunState() {
+  score = 0;
   combo = 0;
   comboTimer = 0;
+  lives = 20;
+  wave = 1;
+  gameOver = false;
+  chapterCleared = false;
+  chapterClearStartedAt = 0;
+  battleActivated = false;
+
+  frogStage = 0;
+  invincibleMode = false;
+  evoBannerUntil = 0;
+  forelegShotAnimUntil = 0;
+
+  autoFire = false;
+  spawnTimer = 0;
+  lastShot = 0;
+  flashTimer = 0;
+  screenShake = 0;
+  hitFlash = 0;
+
+  boss = null;
+  bossStage = 0;
+  bossTriggered = false;
+  bossDefeated = false;
+  bossCooldownUntil = 0;
+  wingmanUntil = 0;
+  wingmanAngle = 0;
+  wingmanWarningUntil = 0;
+
+  frog.x = 120;
+  frog.y = 280;
+
+  pointer.active = false;
+  pointer.down = false;
+
+  bullets.length = 0;
+  enemies.length = 0;
+  enemyBullets.length = 0;
+  particles.length = 0;
+  powerUps.length = 0;
+  ripples.length = 0;
+  wakes.length = 0;
+
+  evoBanner.classList.add("hidden");
+  chapterOverlay.classList.add("hidden");
+  gameOverOverlay.classList.add("hidden");
+  resetJoystick();
+  updateDevUI();
   updateUI();
 }
 
 function startGameSession() {
+  tryEnterFullscreen();
+  if (started && !chapterCleared && !gameOver) return;
+  resetRunState();
   started = true;
-  startOverlay.classList.add("hidden");
   autoFire = true;
-  pointer.active = false;
-  refocusGame();
+  startOverlay.classList.add("hidden");
+  chapterOverlay.classList.add("hidden");
+  gameOverOverlay.classList.add("hidden");
+  canvas.style.pointerEvents = "auto";
+  setBattleLayout(true);
+  canvas.focus();
+  updateUI();
+}
+
+function returnToStartMenu() {
+  resetRunState();
+  started = false;
+  autoFire = false;
+  canvas.style.pointerEvents = "none";
+  setBattleLayout(false);
+  gameOverOverlay.classList.add("hidden");
+  startOverlay.classList.remove("hidden");
+  canvas.focus();
+  updateUI();
+}
+
+function shootBubble(x, y, vx = 8.4, vy = 0, r = 7, damage = 1) {
+  bullets.push({ x, y, vx, vy, r, damage });
+}
+
+function shoot() {
+  const now = performance.now();
+  if (!started || gameOver || chapterCleared) return;
+  const interval = wingmanUntil > now ? 120 : 165;
+  if (now - lastShot < interval) return;
+  lastShot = now;
+
+  if (frogStage === 0) {
+    shootBubble(frog.x + frog.w * 1.15, frog.y + frog.h * 0.52, 8.4, 0, 7, 1);
+  } else {
+    shootBubble(frog.x + frog.w * 1.15, frog.y + frog.h * 0.52, 8.4, 0, 7, 1);
+    shootBubble(frog.x + frog.w * 1.00, frog.y + frog.h * 0.44, 7.8, -2.0, 6, 0.55);
+    shootBubble(frog.x + frog.w * 0.98, frog.y + frog.h * 0.62, 7.8, 2.0, 6, 0.55);
+    if (frogStage >= 2) {
+      shootBubble(frog.x + frog.w * 0.06, frog.y + frog.h * 0.40, -5.8, -1.2, 5, 0.45);
+      shootBubble(frog.x + frog.w * 0.02, frog.y + frog.h * 0.64, -5.8, 1.2, 5, 0.45);
+    }
+    forelegShotAnimUntil = now + 120;
+  }
+
+  if (wingmanUntil > now) {
+    const orbitR = 44;
+    const cx = frog.x + frog.w * 0.5;
+    const cy = frog.y + frog.h * 0.5;
+    const a1 = wingmanAngle;
+    const a2 = wingmanAngle + Math.PI;
+    const wing1x = cx + Math.cos(a1) * orbitR;
+    const wing1y = cy + Math.sin(a1) * orbitR;
+    const wing2x = cx + Math.cos(a2) * orbitR;
+    const wing2y = cy + Math.sin(a2) * orbitR;
+
+    addWake(wing1x, wing1y, 0.8, "rgba(125,211,252,0.22)");
+    addWake(wing2x, wing2y, 0.8, "rgba(159,227,173,0.22)");
+    addBurst(wing1x, wing1y, "#9ae6ff", 2);
+    addBurst(wing2x, wing2y, "#b7f7c7", 2);
+
+    // 两只小青蛙各自上下发射
+    shootBubble(wing1x, wing1y - 4, 0, -7.2, 5, 0.8);
+    shootBubble(wing1x, wing1y + 4, 0, 7.2, 5, 0.8);
+    shootBubble(wing2x, wing2y - 4, 0, -7.2, 5, 0.8);
+    shootBubble(wing2x, wing2y + 4, 0, 7.2, 5, 0.8);
+  }
+
+  addRipple(frog.x + frog.w * 0.90, frog.y + frog.h * 0.45, "rgba(220,250,255,0.20)");
+  addBurst(frog.x + frog.w * 0.90, frog.y + frog.h * 0.45, "#bde6ff", 5);
 }
 
 function registerKill() {
   combo += 1;
   comboTimer = 120;
-  score += 1 + Math.min(4, Math.floor(combo / 5));
-  if (score > wave * 20) wave = Math.min(9, 1 + Math.floor(score / 20));
-  saveBestScore();
+  applyScoreDelta(2 + Math.min(5, Math.floor(combo / 4)));
 }
 
-function shootBubble(x, y, speed = 8.2, size = 7) {
-  bullets.push({
-    x,
-    y,
-    r: size,
-    speed,
-    vx: speed,
-    vy: 0
-  });
+function spawnPowerUp(x, y) {
+  const roll = Math.random();
+  const kind = roll < 0.48 ? "heart" : roll < 0.76 ? "bubble" : "wingman";
+  powerUps.push({ x, y, kind, speed: 0.9, phase: Math.random() * Math.PI * 2 });
 }
 
-function shoot() {
-  const now = performance.now();
-  if (gameOver) return;
-  const interval = wingmanUntil > now ? 125 : 165;
-  if (now - lastShot < interval) return;
-  lastShot = now;
-
-  shootBubble(frog.x + frog.w * 0.86, frog.y + frog.h * 0.40, 8.6, 7);
-  if (wingmanUntil > now) {
-    shootBubble(frog.x + 10, frog.y + frog.h * 0.52, 8.0, 6);
-    shootBubble(frog.x + frog.w + 2, frog.y + frog.h * 0.52, 8.0, 6);
+function spawnPowerBurst(x, y, count) {
+  for (let i = 0; i < count; i++) {
+    const angle = (Math.PI * 2 * i) / count + Math.random() * 0.5;
+    const radius = 18 + Math.random() * 28;
+    spawnPowerUp(x + Math.cos(angle) * radius, y + Math.sin(angle) * radius * 0.55);
   }
-  addRipple(frog.x + 28, frog.y + 16, "rgba(160,230,255,0.28)");
-  addBurst(frog.x + frog.w * 0.88, frog.y + frog.h * 0.38, "rgba(210,245,255,0.95)", 5);
-  addBurst(frog.x + frog.w * 0.78, frog.y + frog.h * 0.44, "#9ae6ff", 3);
-  addRipple(frog.x + frog.w * 0.92, frog.y + frog.h * 0.40, "rgba(220,250,255,0.20)");
-  addWake(frog.x + frog.w * 0.82, frog.y + frog.h * 0.46, 0.7, "rgba(220,250,255,0.12)");
 }
 
-function startDash() {
-  const now = performance.now();
-  if (gameOver) return;
-  if (dashCooldownUntil > now) return;
+function getBossScoreTarget(stage) {
+  if (stage >= 3) return Infinity; // 已完成三段 Boss，不再生成
+  if (stage === 0) return 90;
+  if (stage === 1) return 220;
+  return 420;
+}
 
-  let dx = 0;
-  let dy = 0;
-  if (keys.ArrowLeft || keys.KeyA) dx -= 1;
-  if (keys.ArrowRight || keys.KeyD) dx += 1;
-  if (keys.ArrowUp || keys.KeyW) dy -= 1;
-  if (keys.ArrowDown || keys.KeyS) dy += 1;
+function isFinalBossStage() {
+  return bossStage >= 2;
+}
 
-  if (dx === 0 && dy === 0) {
-    dx = lastDashDirX;
-    dy = lastDashDirY;
-  }
-
-  if (dx === 0 && dy === 0) dx = 1;
-
-  const len = Math.hypot(dx, dy) || 1;
-  dashVX = (dx / len) * 12;
-  dashVY = (dy / len) * 12;
-  lastDashDirX = dx / len;
-  lastDashDirY = dy / len;
-  lastAimX = 1;
-  lastAimY = 0;
-
-  dashUntil = now + 180;
-  dashCooldownUntil = now + 2400;
-  frog.x += dashVX * 2.2;
-  frog.y += dashVY * 2.2;
-  clampFrog();
-  screenShake = Math.max(screenShake, 8);
-  hitFlash = Math.max(hitFlash, 3);
-  addRipple(frog.x + frog.w / 2, frog.y + frog.h / 2, "rgba(160,255,220,0.38)");
-  addWake(frog.x + frog.w / 2, frog.y + frog.h / 2, 2.1, "rgba(190,255,235,0.22)");
-  disturbPadsAndFish(frog.x + frog.w / 2, frog.y + frog.h / 2, 120, 1.3);
-  addBurst(frog.x + frog.w / 2, frog.y + frog.h / 2, "#9ff7c2", 18);
-  updateUI();
+function spawnBoss() {
+  const hpBase = [44, 144, 216][Math.min(bossStage, 2)];
+  const sizeScale = [1.04, 1.28, 1.55][Math.min(bossStage, 2)];
+  boss = {
+    x: W - 188,
+    y: H / 2 - 72,
+    w: 138 * sizeScale,
+    h: 116 * sizeScale,
+    hp: hpBase + wave * 2,
+    maxHp: hpBase + wave * 2,
+    dir: 1,
+    fireCd: 0,
+    stage: bossStage,
+    form: bossStage === 0 ? "dragonfly" : bossStage === 1 ? "beetle" : "leviathan"
+  };
+  addBurst(boss.x + 30, boss.y + 30, "#ff6b6b", 20 + bossStage * 6);
 }
 
 function spawnEnemy() {
-  if (gameOver || boss) return;
-
+  if (gameOver || boss || performance.now() < bossCooldownUntil || chapterCleared) return;
   const types = ["fly", "mosquito", "beetle", "wasp"];
   const maxTypeIndex = Math.min(types.length, 2 + Math.floor(wave / 2));
   const type = types[Math.floor(Math.random() * maxTypeIndex)];
-
   const enemy = {
     type,
     x: W + 40,
@@ -621,75 +846,35 @@ function spawnEnemy() {
     waveOffset: Math.random() * Math.PI * 2,
     shotCd: 0
   };
-
   if (type === "mosquito") {
-    enemy.w = 28;
-    enemy.h = 24;
-    enemy.speed = 3.2 + Math.random() * 1.4 + wave * 0.12;
+    enemy.w = 28; enemy.h = 24; enemy.speed = 2.6 + Math.random() * 1.1 + wave * 0.08;
   }
   if (type === "beetle") {
-    enemy.w = 42;
-    enemy.h = 34;
-    enemy.hp = 2 + (wave > 4 ? 1 : 0);
-    enemy.speed = 1.8 + Math.random() * 0.8 + wave * 0.08;
+    enemy.w = 42; enemy.h = 34; enemy.hp = 2 + (wave > 4 ? 1 : 0); enemy.speed = 1.8 + Math.random() * 0.8 + wave * 0.08;
   }
   if (type === "wasp") {
-    enemy.w = 36;
-    enemy.h = 30;
-    enemy.hp = 2;
-    enemy.speed = 2.7 + Math.random() * 1.0 + wave * 0.15;
+    enemy.w = 36; enemy.h = 30; enemy.hp = 2; enemy.speed = 2.7 + Math.random() * 1.0 + wave * 0.15;
   }
-
   enemies.push(enemy);
 }
 
-function spawnBoss() {
-  boss = {
-    x: W - 188,
-    y: H / 2 - 72,
-    w: 138,
-    h: 116,
-    hp: 14 + wave * 2,
-    maxHp: 14 + wave * 2,
-    dir: 1,
-    fireCd: 0
-  };
-  addBurst(boss.x + 30, boss.y + 30, "#ff6b6b", 20);
-}
-
-function spawnPowerUp(x, y) {
-  const roll = Math.random();
-  const kind = roll < 0.34 ? "heart" : roll < 0.68 ? "bubble" : "wingman";
-  powerUps.push({
-    x, y, kind,
-    speed: 1.8,
-    phase: Math.random() * Math.PI * 2
-  });
-}
-
-function clampFrog() {
-  frog.x = clamp(frog.x, 10, W - frog.w - 10);
-  frog.y = clamp(frog.y, 10, H - frog.h - 10);
-}
-
 function hitFrog(damage = 1) {
-  if (gameOver) return;
+  if (gameOver || invincibleMode || chapterCleared) return;
   lives -= damage;
   flashTimer = 10;
-  resetCombo();
+  combo = 0;
+  comboTimer = 0;
   addBurst(frog.x + 18, frog.y + 18, "#ffe08a", 12);
-  screenShake = 10;
-  hitFlash = 8;
-  addRipple(frog.x + 18, frog.y + 18, "rgba(255,240,180,0.32)");
+  screenShake = 8;
+  hitFlash = 6;
   updateUI();
-
   if (lives <= 0) {
     lives = 0;
     gameOver = true;
-    pendingRestart = true;
     autoFire = false;
+    battleActivated = false;
+    gameOverOverlay.classList.remove("hidden");
     saveBestScore();
-    refocusGame();
   }
 }
 
@@ -702,179 +887,83 @@ function rectHitCircle(rx, ry, rw, rh, cx, cy, cr) {
 }
 
 function updateMovement() {
-  let dx = 0;
-  let dy = 0;
-  const joyX = joystick.active ? joystick.dx / joystick.max : 0;
-  const joyY = joystick.active ? joystick.dy / joystick.max : 0;
-  const joyLen = Math.hypot(joyX, joyY);
-
+  let dx = 0, dy = 0;
   if (keys.ArrowLeft || keys.KeyA) dx -= 1;
   if (keys.ArrowRight || keys.KeyD) dx += 1;
   if (keys.ArrowUp || keys.KeyW) dy -= 1;
   if (keys.ArrowDown || keys.KeyS) dy += 1;
 
-  if (joyLen > 0.01) {
-    dx = joyX;
-    dy = joyY;
+  if (joystick.active) {
+    dx = joystick.dx / joystick.max;
+    dy = joystick.dy / joystick.max;
   }
 
-  if (dx !== 0 || dy !== 0) {
-    const len = Math.hypot(dx, dy) || 1;
-    dx /= len;
-    dy /= len;
+  const len = Math.hypot(dx, dy);
+  if (len > 0.01) {
+    battleActivated = true;
+    dx /= len; dy /= len;
+    frog.x += dx * frog.speed;
+    frog.y += dy * frog.speed;
   }
 
-  let assistX = 0;
-  let assistY = 0;
-  if (pointer.active) {
-    const tx = pointer.x - (frog.x + frog.w / 2);
-    const ty = pointer.y - (frog.y + frog.h / 2);
-    const dist = Math.hypot(tx, ty);
-    if (dist > 8) {
-      const nx = tx / dist;
-      const ny = ty / dist;
-      assistX = nx * frog.assistStrength;
-      assistY = ny * frog.assistStrength;
-    }
+  frog.x = clamp(frog.x, 10, W - frog.w - 10);
+  frog.y = clamp(frog.y, 10, H - frog.h - 10);
+
+  if (battleActivated) {
+    addWake(frog.x + frog.w * 0.45, frog.y + frog.h * 0.82, 0.7);
   }
-
-  const currentSpeed = performance.now() < dashUntil ? frog.baseSpeed * 2.2 : frog.baseSpeed;
-
-  if (joyLen > 0.01) {
-    const nx = joyX / joyLen;
-    const ny = joyY / joyLen;
-    const moveSpeed = currentSpeed * (0.72 + 0.95 * Math.min(1, joyLen));
-    lastMoveX = nx;
-    lastMoveY = ny;
-    lastDashDirX = nx;
-    lastDashDirY = ny;
-    lastAimX = 1;
-    lastAimY = 0;
-    frog.x += nx * moveSpeed;
-    frog.y += ny * moveSpeed;
-    pointer.active = false;
-
-    if (performance.now() < dashUntil) {
-      frog.x += dashVX;
-      frog.y += dashVY;
-    }
-    clampFrog();
-    return;
-  }
-  const finalDX = dx + assistX;
-  const finalDY = dy + assistY;
-  const finalLen = Math.hypot(finalDX, finalDY);
-
-  // 鼠标单独控制时：直接朝鼠标方向移动（更跟手，减少“慢半拍”）
-  if (dx === 0 && dy === 0 && pointer.active) {
-    const tx = pointer.x - (frog.x + frog.w / 2);
-    const ty = pointer.y - (frog.y + frog.h / 2);
-    const dist = Math.hypot(tx, ty);
-
-    if (dist > 4) {
-      lastMoveX = tx / dist;
-      lastMoveY = ty / dist;
-      lastDashDirX = tx / dist;
-      lastDashDirY = ty / dist;
-      lastAimX = 1;
-      lastAimY = 0;
-      frog.x += (tx / dist) * currentSpeed * 1.25;
-      frog.y += (ty / dist) * currentSpeed * 1.25;
-    }
-  }
-  // 键盘或混合控制
-  else if (finalLen > 0) {
-    const cappedDX = finalDX / Math.max(1, finalLen);
-    const cappedDY = finalDY / Math.max(1, finalLen);
-    lastMoveX = cappedDX;
-    lastMoveY = cappedDY;
-    if (dx !== 0 || dy !== 0) {
-      lastDashDirX = dx;
-      lastDashDirY = dy;
-    } else {
-      lastDashDirX = cappedDX;
-      lastDashDirY = cappedDY;
-    }
-    lastAimX = 1;
-    lastAimY = 0;
-    frog.x += cappedDX * currentSpeed;
-    frog.y += cappedDY * currentSpeed;
-  }
-
-  if (performance.now() < dashUntil) {
-    frog.x += dashVX;
-    frog.y += dashVY;
-  }
-  clampFrog();
 }
 
 function update() {
   if (!started) return;
   if (gameOver) return;
+
+  if (chapterCleared) {
+    if (performance.now() - chapterClearStartedAt > 950) {
+      chapterOverlay.classList.remove("hidden");
+    }
+    return;
+  }
+
   if (flashTimer > 0) flashTimer--;
   if (hitFlash > 0) hitFlash--;
 
+  if (!evoBanner.classList.contains("hidden") && performance.now() >= evoBannerUntil) {
+    evoBanner.classList.add("hidden");
+  }
+
   updateMovement();
-  // frog wake generator
-  const frogSpeedNow = Math.hypot(((keys.ArrowLeft || keys.KeyA ? -1 : 0) + (keys.ArrowRight || keys.KeyD ? 1 : 0) + (joystick.active ? joystick.dx / joystick.max : 0)), ((keys.ArrowUp || keys.KeyW ? -1 : 0) + (keys.ArrowDown || keys.KeyS ? 1 : 0) + (joystick.active ? joystick.dy / joystick.max : 0)));
-  const nowMs = performance.now();
-  if ((frogSpeedNow > 0 || nowMs < dashUntil) && nowMs - lastFrogWakeAt > (nowMs < dashUntil ? 36 : 90)) {
-    lastFrogWakeAt = nowMs;
-    addWake(frog.x + frog.w * 0.45, frog.y + frog.h * 0.82, nowMs < dashUntil ? 1.5 : 0.8, nowMs < dashUntil ? "rgba(190,255,235,0.18)" : "rgba(220,245,255,0.12)");
-    if (nowMs < dashUntil) disturbPadsAndFish(frog.x + frog.w / 2, frog.y + frog.h / 2, 95, 0.7);
-  }
-  if (performance.now() < dashUntil) {
-    addBurst(frog.x + frog.w / 2, frog.y + frog.h / 2, "#9ff7c2", 2);
-  }
 
-  if (keys.Space || autoFire) shoot();
+  if (battleActivated && autoFire) shoot();
 
-  spawnTimer++;
-  const spawnGap = Math.max(28, 68 - wave * 4);
-  if (spawnTimer >= spawnGap) {
-    spawnEnemy();
-    spawnTimer = 0;
+  if (battleActivated) {
+    spawnTimer++;
+    const spawnGap = Math.max(28, 68 - wave * 4);
+    if (spawnTimer >= spawnGap) {
+      spawnEnemy();
+      spawnTimer = 0;
+    }
   }
 
-  if (!bossTriggered && score >= 32) {
+  if (bossStage < 3 && !bossTriggered && !bossDefeated && !boss && performance.now() >= bossCooldownUntil && score >= getBossScoreTarget(bossStage)) {
     bossTriggered = true;
     spawnBoss();
   }
 
   if (comboTimer > 0) {
     comboTimer--;
-    if (comboTimer === 0) resetCombo();
+    if (comboTimer === 0) combo = 0;
   }
 
-  fireflies.forEach(f => {
-    f.x += Math.sin(performance.now() * 0.001 + f.phase) * 0.08;
-    f.y += Math.cos(performance.now() * 0.0014 + f.phase) * 0.05;
-  });
-
-  fishShadows.forEach(f => {
-    f.x += f.speed;
-    f.y += Math.sin(performance.now() * 0.001 + f.phase) * 0.25;
-    if (f.x > W + 40) {
-      f.x = -40;
-      f.y = 140 + Math.random() * (H - 200);
+  if (wingmanUntil > performance.now()) {
+    const wingRemain = wingmanUntil - performance.now();
+    wingmanAngle += 0.08;
+    if (wingRemain <= 2000) {
+      wingmanWarningUntil = performance.now() + 120;
     }
-    f.speed = Math.max(0.3, f.speed * 0.992);
-  });
-
-  pondBubbles.forEach(b => {
-    b.y -= b.speed;
-    if (b.y < 80) {
-      b.y = H + 10;
-      b.x = Math.random() * W;
-    }
-  });
-
-  lilyPads.forEach(p => {
-    p.x += Math.sin(performance.now() * 0.0005 + p.phase) * p.drift;
-    p.y += Math.cos(performance.now() * 0.0007 + p.phase) * p.drift * 0.55;
-    p.x = clamp(p.x, 40, W - 40);
-    p.y = clamp(p.y, 70, H - 40);
-  });
+  } else {
+    wingmanWarningUntil = 0;
+  }
 
   for (let i = wakes.length - 1; i >= 0; i--) {
     const w = wakes[i];
@@ -884,17 +973,17 @@ function update() {
   }
 
   for (let i = bullets.length - 1; i >= 0; i--) {
-    bullets[i].x += bullets[i].vx ?? bullets[i].speed;
-    bullets[i].y += bullets[i].vy ?? 0;
-    if (bullets[i].x > W + 40) bullets.splice(i, 1);
+    const b = bullets[i];
+    b.x += b.vx;
+    b.y += b.vy;
+    if (b.x > W + 50 || b.y < -50 || b.y > H + 50) bullets.splice(i, 1);
   }
 
   for (let i = enemyBullets.length - 1; i >= 0; i--) {
-    enemyBullets[i].x -= enemyBullets[i].speedX;
-    enemyBullets[i].y += enemyBullets[i].speedY;
-    if (enemyBullets[i].x < -20 || enemyBullets[i].y < -20 || enemyBullets[i].y > H + 20) {
-      enemyBullets.splice(i, 1);
-    }
+    const b = enemyBullets[i];
+    b.x -= b.speedX;
+    b.y += b.speedY;
+    if (b.x < -30 || b.y < -30 || b.y > H + 30) enemyBullets.splice(i, 1);
   }
 
   for (let i = enemies.length - 1; i >= 0; i--) {
@@ -924,14 +1013,12 @@ function update() {
       const b = bullets[j];
       if (rectHitCircle(e.x, e.y, e.w, e.h, b.x, b.y, b.r)) {
         bullets.splice(j, 1);
-        e.hp -= 1;
-        addBurst(b.x, b.y, "#a8ecff", 6);
+        e.hp -= b.damage ?? 1;
+        addBurst(b.x, b.y, "#a8ecff", 5);
         if (e.hp <= 0) {
           enemies.splice(i, 1);
           registerKill();
-          slowMoTimer = Math.max(slowMoTimer, 4);
-          hitFlash = Math.max(hitFlash, 4);
-          addRipple(e.x + e.w / 2, e.y + e.h / 2, "rgba(255,255,255,0.35)");
+          addRipple(e.x + e.w / 2, e.y + e.h / 2);
           if (Math.random() < 0.18) spawnPowerUp(e.x + e.w / 2, e.y + e.h / 2);
           addBurst(e.x + e.w / 2, e.y + e.h / 2, "#ff9f68", 10);
         }
@@ -945,37 +1032,68 @@ function update() {
     if (boss.y < 26 || boss.y + boss.h > H - 26) boss.dir *= -1;
 
     boss.fireCd++;
-    if (boss.fireCd >= 52) {
+    const bossFireGap = boss.stage === 0 ? 50 : boss.stage === 1 ? 40 : 30;
+    if (boss.fireCd >= bossFireGap) {
       boss.fireCd = 0;
-      enemyBullets.push({ x: boss.x + 10, y: boss.y + 30, speedX: 4.2, speedY: -0.45 });
-      enemyBullets.push({ x: boss.x + 10, y: boss.y + boss.h - 30, speedX: 4.2, speedY: 0.45 });
+      enemyBullets.push({ x: boss.x + 10, y: boss.y + 30, speedX: 4.4 + boss.stage * 0.45, speedY: -0.5 - boss.stage * 0.14 });
+      enemyBullets.push({ x: boss.x + 10, y: boss.y + boss.h - 30, speedX: 4.4 + boss.stage * 0.45, speedY: 0.5 + boss.stage * 0.14 });
+      if (boss.stage >= 1) {
+        enemyBullets.push({ x: boss.x + 16, y: boss.y + boss.h / 2, speedX: 4.9 + boss.stage * 0.45, speedY: 0 });
+      }
+      if (boss.stage >= 2) {
+        enemyBullets.push({ x: boss.x + 22, y: boss.y + 42, speedX: 4.8, speedY: -0.95 });
+        enemyBullets.push({ x: boss.x + 22, y: boss.y + boss.h - 42, speedX: 4.8, speedY: 0.95 });
+      }
     }
 
     if (rectHitCircle(boss.x, boss.y, boss.w, boss.h, frog.x + frog.w / 2, frog.y + frog.h / 2, 18)) {
-      boss = null;
-      hitFrog(2);
+      // 无敌模式下不要把 Boss 直接撞没，否则 bossTriggered 会卡住，后续 Boss 不再刷新
+      if (!invincibleMode) {
+        boss = null;
+        bossTriggered = false;
+        hitFrog(2);
+      }
     }
 
     for (let j = bullets.length - 1; j >= 0; j--) {
       const b = bullets[j];
       if (boss && rectHitCircle(boss.x, boss.y, boss.w, boss.h, b.x, b.y, b.r)) {
         bullets.splice(j, 1);
-        boss.hp -= 2;
-        hitFlash = Math.max(hitFlash, 2);
-        addRipple(b.x, b.y, "rgba(200,240,255,0.32)");
-        addBurst(b.x, b.y, "#bde6ff", 6);
+        boss.hp -= (b.damage ?? 1) * 2;
+        addBurst(b.x, b.y, "#bde6ff", 5);
         if (boss.hp <= 0) {
-          score += 16;
-          screenShake = 22;
-          slowMoTimer = Math.max(slowMoTimer, 10);
-          hitFlash = 12;
+          applyScoreDelta(40 + boss.stage * 20);
+          if (boss.stage === 0) {
+            lives = Math.min(20, lives + 2);
+            showEvolutionBanner("🐸 BOSS击败", "+2 生命", 900);
+          } else if (boss.stage === 1) {
+            lives = Math.min(20, lives + 3);
+            showEvolutionBanner("🐸 BOSS击败", "+3 生命", 900);
+          } else {
+            showEvolutionBanner("🌊 最终BOSS击败", "水底章节完成", 1100);
+          }
           addRipple(boss.x + boss.w / 2, boss.y + boss.h / 2, "rgba(255,120,120,0.40)");
-          wave += 1;
-          addBurst(boss.x + boss.w / 2, boss.y + boss.h / 2, "#ff6b6b", 26);
-          spawnPowerUp(boss.x + boss.w / 2, boss.y + boss.h / 2);
+          addBurst(boss.x + boss.w / 2, boss.y + boss.h / 2, "#ff6b6b", 30 + boss.stage * 10);
+          spawnPowerBurst(boss.x + boss.w / 2, boss.y + boss.h / 2, boss.stage === 0 ? 3 : boss.stage === 1 ? 4 : 6);
           wingmanUntil = performance.now() + 12000;
+          wingmanWarningUntil = 0;
+          bossCooldownUntil = performance.now() + 4000;
+          wave += 1;
+          updateUI();
+
+          if (isFinalBossStage()) {
+            screenShake = 22;
+            hitFlash = 10;
+            bossDefeated = true;
+            chapterCleared = true;
+            chapterClearStartedAt = performance.now();
+            battleActivated = false;
+            autoFire = false;
+          } else {
+            bossStage += 1;
+            bossTriggered = false;
+          }
           boss = null;
-          bossTriggered = false;
           saveBestScore();
           break;
         }
@@ -995,11 +1113,30 @@ function update() {
     const p = powerUps[i];
     p.x -= p.speed;
     p.y += Math.sin(performance.now() * 0.004 + p.phase) * 0.5;
-    if (rectHitCircle(frog.x, frog.y, frog.w, frog.h, p.x, p.y, 12)) {
-      if (p.kind === "heart") lives = Math.min(7, lives + 1);
-      else if (p.kind === "bubble") score += 4;
-      else wingmanUntil = performance.now() + 12000;
 
+    const frogCx = frog.x + frog.w / 2;
+    const frogCy = frog.y + frog.h / 2;
+    const dx = frogCx - p.x;
+    const dy = frogCy - p.y;
+    const dist = Math.hypot(dx, dy) || 1;
+
+    // 自动吸附：靠近青蛙时，奖励会缓慢被吸过去
+    if (dist < 150) {
+      const pull = 1 - dist / 150;
+      p.x += (dx / dist) * (1.2 + pull * 3.2);
+      p.y += (dy / dist) * (1.2 + pull * 3.2);
+    }
+    if (rectHitCircle(frog.x, frog.y, frog.w, frog.h, p.x, p.y, 12)) {
+      if (p.kind === "heart") {
+        lives = Math.min(20, lives + 1);
+        showEvolutionBanner("❤️ 生命 +1", "青蛙恢复了一点体力", 800);
+      } else if (p.kind === "bubble") {
+        applyScoreDelta(10);
+        showEvolutionBanner("💧 分数 +10", "泡泡能量吸收", 800);
+      } else {
+        wingmanUntil = performance.now() + 12000;
+        showEvolutionBanner("✨ 僚机支援", "短时间双侧射击支援", 900);
+      }
       addBurst(p.x, p.y, p.kind === "heart" ? "#ff8ba7" : p.kind === "wingman" ? "#fde68a" : "#9ae6ff", 10);
       powerUps.splice(i, 1);
       updateUI();
@@ -1030,7 +1167,6 @@ function update() {
 }
 
 function drawPond() {
-  // 5. 强化水体分层色
   const g = ctx.createLinearGradient(0, 0, 0, H);
   g.addColorStop(0, boss ? "#8fd39a" : "#83dc85");
   g.addColorStop(0.30, boss ? "#4f8e69" : "#5eae6b");
@@ -1041,259 +1177,31 @@ function drawPond() {
 
   const moonGlow = ctx.createRadialGradient(W * 0.82, 72, 10, W * 0.82, 72, 170);
   moonGlow.addColorStop(0, boss ? "rgba(255,210,210,0.22)" : "rgba(235,245,255,0.28)");
-  moonGlow.addColorStop(0.45, boss ? "rgba(255,170,170,0.08)" : "rgba(200,230,255,0.10)");
   moonGlow.addColorStop(1, "rgba(255,255,255,0)");
   ctx.fillStyle = moonGlow;
   ctx.fillRect(0, 0, W, H);
 
-  ctx.fillStyle = boss ? "rgba(255,220,220,0.80)" : "rgba(245,250,255,0.90)";
+  ctx.fillStyle = boss ? "rgba(255,220,220,0.82)" : "rgba(245,250,255,0.90)";
   ctx.beginPath();
   ctx.arc(W * 0.82, 72, 22, 0, Math.PI * 2);
   ctx.fill();
 
-  ctx.fillStyle = "rgba(255,255,255,0.18)";
-  ctx.beginPath();
-  ctx.arc(W * 0.81, 66, 8, 0, Math.PI * 2);
-  ctx.fill();
-
-  // v6 动态水面折射光（增加水面流动感）
-  const t = performance.now() * 0.001;
-  ctx.globalAlpha = 0.08;
-  for (let i = 0; i < 6; i++) {
-    const waveY = (i * 90 + t * 40) % (H + 120) - 60;
-    const grad = ctx.createLinearGradient(0, waveY, 0, waveY + 80);
-    grad.addColorStop(0, "rgba(255,255,255,0)");
-    grad.addColorStop(0.5, "rgba(255,255,255,0.35)");
-    grad.addColorStop(1, "rgba(255,255,255,0)");
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, waveY, W, 80);
-  }
-  waterBands.forEach((band, i) => {
-    const waveOffset = Math.sin(t * band.speed + band.phase) * 26;
-    const alpha = 0.035 + Math.sin(t * 1.5 + band.phase) * 0.015;
-    ctx.fillStyle = `rgba(200,255,240,${alpha})`;
-    ctx.beginPath();
-    ctx.ellipse(W * 0.5 + waveOffset, band.y, band.width, 12 + (i % 3) * 2, 0, 0, Math.PI * 2);
-    ctx.fill();
-  });
-  // 6. 新增更快的流光层
-  for (let i = 0; i < 4; i++) {
-    const y2 = 85 + i * 118 + Math.sin(t * (2.2 + i * 0.2)) * 10;
-    const x2 = W * 0.52 + Math.cos(t * (1.4 + i * 0.15)) * 60;
-    const g2 = ctx.createLinearGradient(x2 - 120, y2, x2 + 120, y2);
-    g2.addColorStop(0, "rgba(255,255,255,0)");
-    g2.addColorStop(0.5, boss ? "rgba(255,150,150,0.16)" : "rgba(220,255,245,0.11)");
-    g2.addColorStop(1, "rgba(255,255,255,0)");
-    ctx.fillStyle = g2;
-    ctx.beginPath();
-    ctx.ellipse(x2, y2, 90 + i * 12, 10 + i, 0, 0, Math.PI * 2);
-    ctx.fill();
-  }
-  ctx.globalAlpha = 1;
-
-  const moonReflect = ctx.createLinearGradient(W * 0.76, 130, W * 0.76, H - 10);
-  moonReflect.addColorStop(0, "rgba(255,255,255,0)");
-  moonReflect.addColorStop(0.35, boss ? "rgba(255,185,185,0.08)" : "rgba(235,245,255,0.12)");
-  moonReflect.addColorStop(0.7, boss ? "rgba(255,170,170,0.05)" : "rgba(200,235,255,0.07)");
-  moonReflect.addColorStop(1, "rgba(255,255,255,0)");
-  ctx.fillStyle = moonReflect;
-  ctx.beginPath();
-  ctx.ellipse(W * 0.76 + Math.sin(t * 0.7) * 10, H * 0.58, 70, 180, 0, 0, Math.PI * 2);
-  ctx.fill();
-
-  // 水面光影层（增加立体感）
-  const light = ctx.createRadialGradient(W * 0.35, H * 0.15, 40, W * 0.35, H * 0.15, W * 0.9);
-  light.addColorStop(0, "rgba(255,255,255,0.10)");
-  light.addColorStop(1, "rgba(0,0,0,0)");
-  ctx.fillStyle = light;
-  ctx.fillRect(0, 0, W, H);
-
+  ctx.fillStyle = "rgba(255,255,255,0.12)";
   for (let i = 0; i < 5; i++) {
-    const rx = (i * 190 + performance.now() * (0.03 + i * 0.003)) % (W + 180) - 90;
-    const ry = 120 + i * 72 + Math.sin(performance.now() * 0.002 + i) * 8;
-    const rg = ctx.createLinearGradient(rx, ry - 18, rx, ry + 18);
-    rg.addColorStop(0, "rgba(255,255,255,0)");
-    rg.addColorStop(0.5, "rgba(220,255,245,0.16)");
-    rg.addColorStop(1, "rgba(255,255,255,0)");
-    ctx.fillStyle = rg;
+    const y = 120 + i * 92 + Math.sin(performance.now() * 0.001 + i) * 8;
     ctx.beginPath();
-    ctx.ellipse(rx, ry, 56, 12, 0, 0, Math.PI * 2);
+    ctx.ellipse(W * 0.5, y, 150 + i * 20, 12 + i, 0, 0, Math.PI * 2);
     ctx.fill();
   }
-  mistBands.forEach((m, i) => {
-    const mx = (W * 0.5) + Math.sin(t * m.speed + m.phase) * (80 + i * 12);
-    const my = m.y + Math.cos(t * 0.9 + m.phase) * 6;
-    const mg = ctx.createLinearGradient(mx - m.width, my, mx + m.width, my);
-    mg.addColorStop(0, "rgba(255,255,255,0)");
-    mg.addColorStop(0.5, boss ? `rgba(255,170,170,${m.alpha * 0.9})` : `rgba(230,245,240,${m.alpha})`);
-    mg.addColorStop(1, "rgba(255,255,255,0)");
-    ctx.fillStyle = mg;
-    ctx.beginPath();
-    ctx.ellipse(mx, my, m.width, 18 + i * 2, 0, 0, Math.PI * 2);
-    ctx.fill();
-  });
-  // 7. 新增漂浮微粒 specks
-  pondSpecks.forEach(s => {
-    const sx = (s.x + performance.now() * s.speed * 0.06) % (W + 40) - 20;
-    const sy = s.y + Math.sin(performance.now() * 0.0015 + s.phase) * 6;
-    ctx.fillStyle = boss
-      ? `rgba(255,180,180,${0.10 + Math.sin(performance.now() * 0.003 + s.phase) * 0.04})`
-      : `rgba(235,255,245,${0.10 + Math.sin(performance.now() * 0.003 + s.phase) * 0.05})`;
-    ctx.beginPath();
-    ctx.arc(sx, sy, s.r, 0, Math.PI * 2);
-    ctx.fill();
-  });
 
-  // 小鱼影子
-  fishShadows.forEach(f => {
-    ctx.fillStyle = boss ? "rgba(120,60,60,0.18)" : "rgba(0,0,0,0.18)";
-    ctx.beginPath();
-    ctx.ellipse(f.x, f.y, f.size, f.size * 0.45, 0, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.moveTo(f.x - f.size, f.y);
-    ctx.lineTo(f.x - f.size - 6, f.y - 3);
-    ctx.lineTo(f.x - f.size - 6, f.y + 3);
-    ctx.closePath();
-    ctx.fill();
-  });
-
-  // 上浮气泡
-  pondBubbles.forEach(b => {
-    ctx.strokeStyle = "rgba(220,245,255,0.35)";
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
-    ctx.stroke();
-
-    ctx.fillStyle = "rgba(255,255,255,0.25)";
-    ctx.beginPath();
-    ctx.arc(b.x - b.r * 0.3, b.y - b.r * 0.3, b.r * 0.35, 0, Math.PI * 2);
-    ctx.fill();
-  });
-
-  // 水体尾流
   wakes.forEach(w => {
     ctx.strokeStyle = w.color.replace(/0?\.\d+\)$/, `${Math.max(w.alpha, 0)})`);
     ctx.lineWidth = 1.6;
     ctx.beginPath();
     ctx.ellipse(w.x, w.y, w.r * 1.4, w.r * 0.55, 0, 0, Math.PI * 2);
     ctx.stroke();
-
-    ctx.strokeStyle = boss ? `rgba(255,190,190,${Math.max(w.alpha * 0.45, 0)})` : `rgba(255,255,255,${Math.max(w.alpha * 0.42, 0)})`;
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.ellipse(w.x, w.y + 1.5, w.r * 0.9, w.r * 0.3, 0, 0, Math.PI * 2);
-    ctx.stroke();
   });
 
-  // 9. 星星/萤火虫氛围变化
-  stars.forEach(s => {
-    ctx.fillStyle = boss ? `rgba(255,210,210,${0.22 + Math.sin(performance.now() * 0.003 + s.phase) * 0.12})` : `rgba(255,255,255,${0.25 + Math.sin(performance.now() * 0.003 + s.phase) * 0.16})`;
-    ctx.beginPath();
-    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-    ctx.fill();
-  });
-
-  fireflies.forEach(f => {
-    ctx.fillStyle = boss ? `rgba(255,140,140,${0.18 + Math.sin(performance.now() * 0.004 + f.phase) * 0.18})` : `rgba(255,245,140,${0.25 + Math.sin(performance.now() * 0.004 + f.phase) * 0.22})`;
-    ctx.beginPath();
-    ctx.arc(f.x, f.y, 2 + f.s, 0, Math.PI * 2);
-    ctx.fill();
-  });
-
-  const meteorCycleA = (performance.now() % 12000) / 12000;
-  if (meteorCycleA > 0.08 && meteorCycleA < 0.115) {
-    const p = (meteorCycleA - 0.08) / 0.035;
-    const mx = W * 0.15 + p * W * 0.42;
-    const my = 45 + p * 120;
-    const meteorGrad = ctx.createLinearGradient(mx - 70, my - 26, mx, my);
-    meteorGrad.addColorStop(0, "rgba(255,255,255,0)");
-    meteorGrad.addColorStop(1, boss ? "rgba(255,190,190,0.85)" : "rgba(255,255,255,0.9)");
-    ctx.strokeStyle = meteorGrad;
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.moveTo(mx - 70, my - 26);
-    ctx.lineTo(mx, my);
-    ctx.stroke();
-    ctx.fillStyle = boss ? "rgba(255,210,210,0.95)" : "rgba(255,255,255,0.95)";
-    ctx.beginPath();
-    ctx.arc(mx, my, 2.8, 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  const meteorCycleB = (performance.now() % 17000) / 17000;
-  if (meteorCycleB > 0.52 && meteorCycleB < 0.548) {
-    const p = (meteorCycleB - 0.52) / 0.028;
-    const mx = W * 0.55 + p * W * 0.24;
-    const my = 30 + p * 86;
-    const meteorGrad = ctx.createLinearGradient(mx - 54, my - 18, mx, my);
-    meteorGrad.addColorStop(0, "rgba(255,255,255,0)");
-    meteorGrad.addColorStop(1, boss ? "rgba(255,180,180,0.7)" : "rgba(235,245,255,0.78)");
-    ctx.strokeStyle = meteorGrad;
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(mx - 54, my - 18);
-    ctx.lineTo(mx, my);
-    ctx.stroke();
-  }
-
-  // 10. 荷叶更自然，不再是一排条状滑过
-  lilyPads.forEach((pad, i) => {
-    const sway = Math.sin(performance.now() * 0.0014 + pad.phase) * 0.08 + Math.sin((pad.x + pad.y) * 0.02) * 0.03;
-    const px = pad.x;
-    const py = pad.y;
-
-    ctx.save();
-    ctx.translate(px, py);
-    ctx.rotate(sway);
-
-    // 倒影 / 阴影
-    ctx.fillStyle = boss ? "rgba(60,30,30,0.14)" : "rgba(0,0,0,0.14)";
-    ctx.beginPath();
-    ctx.ellipse(0, 4, pad.r * 1.02, pad.r * 0.72, 0, 0, Math.PI * 2);
-    ctx.fill();
-
-    // 主体
-    ctx.fillStyle = boss ? "rgba(88,130,92,0.96)" : "rgba(67,160,71,0.96)";
-    ctx.beginPath();
-    ctx.arc(0, 0, pad.r, 0, Math.PI * 2);
-    ctx.fill();
-
-    // 缺口（睡莲叶的切口）
-    ctx.fillStyle = boss ? "rgba(22,34,34,0.95)" : "rgba(19,38,30,0.95)";
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.arc(0, 0, pad.r + 1, pad.cut - 0.16, pad.cut + 0.16);
-    ctx.closePath();
-    ctx.fill();
-
-    // 叶脉
-    ctx.strokeStyle = "rgba(210,255,220,0.22)";
-    ctx.lineWidth = 1.2;
-    ctx.beginPath();
-    ctx.moveTo(0, 0);
-    ctx.lineTo(pad.r * 0.72, 0);
-    ctx.moveTo(0, 0);
-    ctx.lineTo(pad.r * 0.48, -pad.r * 0.24);
-    ctx.moveTo(0, 0);
-    ctx.lineTo(pad.r * 0.44, pad.r * 0.22);
-    ctx.stroke();
-
-    // 高光
-    const lilyLight = ctx.createRadialGradient(-pad.r * 0.28, -pad.r * 0.32, 1, -pad.r * 0.28, -pad.r * 0.32, pad.r);
-    lilyLight.addColorStop(0, "rgba(255,255,255,0.22)");
-    lilyLight.addColorStop(1, "rgba(255,255,255,0)");
-    ctx.fillStyle = lilyLight;
-    ctx.beginPath();
-    ctx.ellipse(-pad.r * 0.16, -pad.r * 0.18, pad.r * 0.58, pad.r * 0.34, -0.4, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.restore();
-  });
-
-  // 8. 水波更亮
   ripples.forEach(r => {
     ctx.strokeStyle = boss ? `rgba(255,180,180,${Math.max(r.alpha, 0)})` : `rgba(255,255,255,${Math.max(r.alpha, 0)})`;
     ctx.lineWidth = 2;
@@ -1306,190 +1214,230 @@ function drawPond() {
 function drawFrog() {
   const now = performance.now();
   const shootAnim = Math.max(0, 1 - (now - lastShot) / 150);
-  const dashAnim = now < dashUntil ? 1 : 0;
-  const moveLean = clamp(lastDashDirX, -1, 1) * 0.12;
-  const bodySquashX = 1 + shootAnim * 0.08 + dashAnim * 0.18;
-  const bodySquashY = 1 - shootAnim * 0.06 - dashAnim * 0.14;
-  const mouthOpen = shootAnim * 7 + dashAnim * 2;
-  const cheekPuff = shootAnim * 2.6;
-  const foreLegLift = shootAnim * 5 + dashAnim * 2;
-  const rearLegStretch = dashAnim * 5;
+  const forelegFireAnim = Math.max(0, (forelegShotAnimUntil - now) / 120);
+  const moveLean = 0;
+  const bodySquashX = 1 + shootAnim * 0.03;
+  const bodySquashY = 1 - shootAnim * 0.02;
+  const mouthOpen = shootAnim * 5.5;
+  const cheekPuff = shootAnim * 1.4;
+  const foreLegLift = shootAnim * 2.2;
+  const swimCycle = (now * 0.0036) % 1;
+  const legKick = Math.sin(swimCycle * Math.PI * 2 + Math.PI);
+  const tailWiggle = Math.sin(now * 0.010 + frog.x * 0.02) * 0.6;
   const blink = Math.sin(now * 0.0032) > 0.992 ? 0.18 : 1;
 
   ctx.save();
   ctx.translate(frog.x + 22, frog.y + 22);
   ctx.rotate(moveLean);
+  ctx.scale(0.8, 0.8);
 
-  // 地面阴影（跟随冲刺拉长）
   ctx.fillStyle = "rgba(0,0,0,0.25)";
   ctx.beginPath();
-  ctx.ellipse(0, 18, 20 + dashAnim * 5, 8 - dashAnim * 1.5, 0, 0, Math.PI * 2);
+  ctx.ellipse(0, 18, 20, 8, 0, 0, Math.PI * 2);
   ctx.fill();
 
-  // 水面滑行高光
-  ctx.strokeStyle = now < dashUntil ? "rgba(210,255,235,0.26)" : "rgba(220,245,255,0.14)";
-  ctx.lineWidth = 1.4;
+  const rearThickness = frogStage >= 2 ? 7.4 : 5.6;
+  const rearFootSize = frogStage >= 2 ? 6.8 : 4.8;
+  const rearHipX = -18;
+  const rearHipY = 11;
+  const rearKneeX = -31 - legKick * (frogStage >= 2 ? 6.5 : 4.2);
+  const rearKneeY = 18 + legKick * 2.6;
+  const rearFootX = -43 - legKick * (frogStage >= 2 ? 10 : 6.5);
+  const rearFootY = 30 + legKick * 6.5;
+
+  ctx.strokeStyle = frogStage >= 2 ? "#6cdb82" : "#4db85f";
+  ctx.lineWidth = rearThickness;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
   ctx.beginPath();
-  ctx.ellipse(0, 20, 18 + dashAnim * 7, 5, 0, 0, Math.PI * 2);
+  ctx.moveTo(rearHipX, rearHipY);
+  ctx.quadraticCurveTo(rearKneeX, rearKneeY, rearFootX, rearFootY);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(rearHipX, -rearHipY + 8);
+  ctx.quadraticCurveTo(rearKneeX, -rearKneeY + 22, rearFootX, -rearFootY + 44);
   ctx.stroke();
 
-  if (flashTimer > 0 && flashTimer % 2 === 0) ctx.globalAlpha = 0.55;
-
-  // 外层柔光
-  ctx.fillStyle = "rgba(140,255,160,0.18)";
+  ctx.fillStyle = frogStage >= 2 ? "rgba(220,255,226,0.82)" : "rgba(198,255,206,0.68)";
   ctx.beginPath();
-  ctx.arc(0, 0, 28 + shootAnim * 1.5, 0, Math.PI * 2);
+  ctx.ellipse(rearFootX, rearFootY, rearFootSize, rearFootSize * 0.45, -0.32, 0, Math.PI * 2);
+  ctx.ellipse(rearFootX, -rearFootY + 44, rearFootSize, rearFootSize * 0.45, 0.32, 0, Math.PI * 2);
   ctx.fill();
 
-  // 后腿
-  ctx.fillStyle = "#3ea64e";
-  ctx.beginPath();
-  ctx.ellipse(-12 - rearLegStretch, 13 + rearLegStretch * 0.3, 8, 5, -0.6, 0, Math.PI * 2);
-  ctx.ellipse(12 - rearLegStretch, 13 + rearLegStretch * 0.3, 8, 5, 0.6, 0, Math.PI * 2);
-  ctx.fill();
-
-  // 主体
   ctx.save();
   ctx.scale(bodySquashX, bodySquashY);
-  ctx.fillStyle = "#46c35a";
+  ctx.fillStyle = "#37a74d";
   ctx.beginPath();
-  ctx.ellipse(0, 2, 19, 16, 0, 0, Math.PI * 2);
+  ctx.ellipse(-24, 2 + tailWiggle * 0.22, 18, 12, -0.05, 0, Math.PI * 2);
   ctx.fill();
 
-  // 肚皮
-  ctx.fillStyle = "rgba(180,245,170,0.58)";
+  const bodyGrad = ctx.createLinearGradient(-42, 0, 24, 0);
+  bodyGrad.addColorStop(0, "#349d48");
+  bodyGrad.addColorStop(0.55, "#52cb6b");
+  bodyGrad.addColorStop(1, "#79e592");
+  ctx.fillStyle = bodyGrad;
   ctx.beginPath();
-  ctx.ellipse(0, 5, 10, 7, 0, 0, Math.PI * 2);
+  ctx.ellipse(-4, 0, 38, 15, 0.02, 0, Math.PI * 2);
   ctx.fill();
 
-  // 背部斑点
-  ctx.fillStyle = "rgba(33,122,48,0.32)";
+  ctx.fillStyle = "#86ee99";
   ctx.beginPath();
-  ctx.arc(-7, -1, 3.3, 0, Math.PI * 2);
-  ctx.arc(6, -3, 2.8, 0, Math.PI * 2);
-  ctx.arc(4, 6, 2.4, 0, Math.PI * 2);
+  ctx.ellipse(31, -1, 18, 13, 0.05, 0, Math.PI * 2);
   ctx.fill();
 
-  // 高光
-  const frogLight = ctx.createRadialGradient(-6, -10, 2, -6, -10, 22);
-  frogLight.addColorStop(0, "rgba(255,255,255,0.48)");
-  frogLight.addColorStop(1, "rgba(255,255,255,0)");
-  ctx.fillStyle = frogLight;
+  ctx.fillStyle = "rgba(220,252,212,0.78)";
   ctx.beginPath();
-  ctx.ellipse(-4, -4, 18, 14, 0, 0, Math.PI * 2);
+  ctx.ellipse(8, 8, 21, 7.5, 0.03, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = "rgba(33,122,48,0.22)";
+  ctx.beginPath();
+  ctx.arc(-25, -1, 4.4, 0, Math.PI * 2);
+  ctx.arc(-8, -4, 3.2, 0, Math.PI * 2);
+  ctx.arc(8, -1, 3.0, 0, Math.PI * 2);
+  ctx.arc(24, 2, 2.5, 0, Math.PI * 2);
   ctx.fill();
   ctx.restore();
 
-  // 鼓腮
   if (shootAnim > 0) {
-    ctx.fillStyle = "rgba(120,220,120,0.9)";
+    ctx.fillStyle = "rgba(145,234,145,0.82)";
     ctx.beginPath();
-    ctx.arc(-8, 3, 3 + cheekPuff, 0, Math.PI * 2);
-    ctx.arc(8, 3, 3 + cheekPuff, 0, Math.PI * 2);
+    ctx.arc(30, 5, 2.4 + cheekPuff, 0, Math.PI * 2);
+    ctx.arc(37, 4, 2.0 + cheekPuff * 0.6, 0, Math.PI * 2);
     ctx.fill();
   }
 
-  // 眼睛白 + 眨眼
   ctx.fillStyle = "#ffffff";
   ctx.beginPath();
-  ctx.ellipse(-8, -13, 6, 6 * blink, 0, 0, Math.PI * 2);
-  ctx.ellipse(8, -13, 6, 6 * blink, 0, 0, Math.PI * 2);
+  ctx.ellipse(28, -11, 6.6, 6.6 * blink, 0, 0, Math.PI * 2);
+  ctx.ellipse(38, -8, 6.0, 6.0 * blink, 0, 0, Math.PI * 2);
   ctx.fill();
 
-  // 眼珠 + 高光
   if (blink > 0.25) {
     ctx.fillStyle = "#111827";
     ctx.beginPath();
-    ctx.arc(-8 + lastDashDirX * 1.2, -13 + lastDashDirY * 0.8, 3, 0, Math.PI * 2);
-    ctx.arc(8 + lastDashDirX * 1.2, -13 + lastDashDirY * 0.8, 3, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.fillStyle = "rgba(255,255,255,0.55)";
-    ctx.beginPath();
-    ctx.arc(-6.8 + lastDashDirX * 1.2, -14.4 + lastDashDirY * 0.8, 1.1, 0, Math.PI * 2);
-    ctx.arc(9.2 + lastDashDirX * 1.2, -14.4 + lastDashDirY * 0.8, 1.1, 0, Math.PI * 2);
+    ctx.arc(28.6, -11, 3.0, 0, Math.PI * 2);
+    ctx.arc(38.2, -8, 2.8, 0, Math.PI * 2);
     ctx.fill();
   }
 
-  // 嘴巴 / 吐泡泡动作
   ctx.strokeStyle = "#1f6f2c";
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.arc(0, 4 - shootAnim * 1.5, 7 + mouthOpen * 0.12, 0.25, Math.PI - 0.25);
+  ctx.arc(39, 5 - shootAnim * 0.8, 5.8 + mouthOpen * 0.08, -0.25, Math.PI * 0.72);
   ctx.stroke();
 
-  if (shootAnim > 0.08) {
-    ctx.fillStyle = "rgba(255,210,220,0.92)";
+  if (frogStage >= 1) {
+    const paddleReach = 4 + forelegFireAnim * 8;
+    const paddleLift = 2 + forelegFireAnim * 5.5;
+    ctx.strokeStyle = "#90e49e";
+    ctx.lineWidth = 4.8;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
     ctx.beginPath();
-    ctx.ellipse(0, 7 - shootAnim * 1.4, 4 + mouthOpen * 0.18, 2 + mouthOpen * 0.12, 0, 0, Math.PI * 2);
-    ctx.fill();
+    ctx.moveTo(18, 5);
+    ctx.quadraticCurveTo(27, 9 - paddleLift * 0.15, 34 + paddleReach, 12 - paddleLift);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(14, 10);
+    ctx.quadraticCurveTo(23, 15 + paddleLift * 0.1, 30 + paddleReach, 19 + paddleLift * 0.12);
+    ctx.stroke();
 
-    ctx.fillStyle = "rgba(210,245,255,0.40)";
+    ctx.fillStyle = "rgba(221,255,226,0.94)";
     ctx.beginPath();
-    ctx.ellipse(8 + shootAnim * 7 + lastAimX * 3, 6 - shootAnim * 1.2 + lastAimY * 2, 4 + shootAnim * 4, 2 + shootAnim * 1.4, 0, 0, Math.PI * 2);
+    ctx.ellipse(34 + paddleReach, 12 - paddleLift, 4.8, 2.4, -0.28, 0, Math.PI * 2);
+    ctx.ellipse(30 + paddleReach, 19 + paddleLift * 0.12, 5.0, 2.5, 0.24, 0, Math.PI * 2);
     ctx.fill();
-
-    ctx.fillStyle = "rgba(255,255,255,0.55)";
+  } else {
+    ctx.strokeStyle = "#5bc868";
+    ctx.lineWidth = 4.2;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
     ctx.beginPath();
-    ctx.arc(11 + shootAnim * 8 + lastAimX * 3, 5 + lastAimY * 2, 1.5 + shootAnim * 1.5, 0, Math.PI * 2);
+    ctx.moveTo(16, 6);
+    ctx.quadraticCurveTo(22, 10 - foreLegLift * 0.08, 26, 15 - foreLegLift * 0.25);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(13, 10);
+    ctx.quadraticCurveTo(19, 14 - foreLegLift * 0.03, 22, 19 - foreLegLift * 0.18);
+    ctx.stroke();
+
+    ctx.fillStyle = "rgba(198,255,198,0.74)";
+    ctx.beginPath();
+    ctx.ellipse(26, 15 - foreLegLift * 0.25, 4.0, 2.1, -0.12, 0, Math.PI * 2);
+    ctx.ellipse(22, 19 - foreLegLift * 0.18, 4.0, 2.2, 0.18, 0, Math.PI * 2);
     ctx.fill();
   }
-
-  // 前腿
-  ctx.fillStyle = "#4fb84f";
-  ctx.beginPath();
-  ctx.ellipse(-10, 14 - foreLegLift, 5, 4, -0.4, 0, Math.PI * 2);
-  ctx.ellipse(10, 14 - foreLegLift, 5, 4, 0.4, 0, Math.PI * 2);
-  ctx.fill();
-
-  // 脚趾
-  ctx.fillStyle = "rgba(190,255,190,0.72)";
-  ctx.beginPath();
-  ctx.arc(-13, 17 - foreLegLift, 1.6, 0, Math.PI * 2);
-  ctx.arc(-9, 18 - foreLegLift, 1.5, 0, Math.PI * 2);
-  ctx.arc(-5, 17 - foreLegLift, 1.4, 0, Math.PI * 2);
-  ctx.arc(13, 17 - foreLegLift, 1.6, 0, Math.PI * 2);
-  ctx.arc(9, 18 - foreLegLift, 1.5, 0, Math.PI * 2);
-  ctx.arc(5, 17 - foreLegLift, 1.4, 0, Math.PI * 2);
-  ctx.fill();
 
   if (wingmanUntil > now) {
-    ctx.fillStyle = "#fde68a";
-    ctx.beginPath();
-    ctx.arc(-25, 0, 6, 0, Math.PI * 2);
-    ctx.arc(25, 0, 6, 0, Math.PI * 2);
-    ctx.fill();
-  }
+    const orbitR = 40;
+    const a1 = wingmanAngle;
+    const a2 = wingmanAngle + Math.PI;
+    const ringPulse = 0.92 + Math.sin(now * 0.012) * 0.08;
 
-  if (now < dashUntil) {
-    ctx.fillStyle = "rgba(159,247,194,0.30)";
+    ctx.strokeStyle = "rgba(125,211,252,0.24)";
+    ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.arc(0, 0, 40, 0, Math.PI * 2);
-    ctx.fill();
-  }
+    ctx.arc(0, 0, orbitR * ringPulse, 0, Math.PI * 2);
+    ctx.stroke();
 
-  // 呼吸光晕
-  const breathe = 0.15 + Math.sin(now * 0.004) * 0.08;
-  ctx.fillStyle = `rgba(120,255,160,${breathe})`;
-  ctx.beginPath();
-  ctx.arc(0, 0, 30, 0, Math.PI * 2);
-  ctx.fill();
+    function drawMiniWingFrog(px, py, tint, ringTint) {
+      ctx.save();
+      ctx.translate(px, py);
+      ctx.scale(0.62, 0.62);
+
+      const glow = ctx.createRadialGradient(0, 0, 4, 0, 0, 28);
+      glow.addColorStop(0, ringTint);
+      glow.addColorStop(1, "rgba(255,255,255,0)");
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(0, 0, 28, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = tint;
+      ctx.beginPath();
+      ctx.ellipse(-10, 1, 10, 7, -0.05, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.ellipse(10, -1, 10, 8, 0.04, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "rgba(220,252,212,0.82)";
+      ctx.beginPath();
+      ctx.ellipse(2, 4, 10, 4.2, 0.03, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#ffffff";
+      ctx.beginPath();
+      ctx.ellipse(8, -6, 3.8, 3.8, 0, 0, Math.PI * 2);
+      ctx.ellipse(16, -4, 3.4, 3.4, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#111827";
+      ctx.beginPath();
+      ctx.arc(8.5, -6, 1.4, 0, Math.PI * 2);
+      ctx.arc(16.2, -4, 1.3, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.strokeStyle = ringTint;
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.arc(0, 0, 20, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
+    drawMiniWingFrog(Math.cos(a1) * orbitR, Math.sin(a1) * orbitR, "#9fe3ad", "rgba(159,227,173,0.55)");
+    drawMiniWingFrog(Math.cos(a2) * orbitR, Math.sin(a2) * orbitR, "#8fd9ff", "rgba(125,211,252,0.55)");
+  }
 
   ctx.restore();
 }
 
 function drawBullets() {
   bullets.forEach(b => {
-    // 泡泡拖尾
-    const trail = ctx.createRadialGradient(b.x - 6, b.y, 1, b.x, b.y, b.r + 12);
-    trail.addColorStop(0, "rgba(200,240,255,0.35)");
-    trail.addColorStop(1, "rgba(125,211,252,0)");
-    ctx.fillStyle = trail;
-    ctx.beginPath();
-    ctx.ellipse(b.x - 5, b.y, b.r + 7, b.r + 4, 0, 0, Math.PI * 2);
-    ctx.fill();
-
-    // 泡泡主体
     const grad = ctx.createRadialGradient(b.x - 1, b.y - 1, 1, b.x, b.y, b.r + 4);
     grad.addColorStop(0, "#ffffff");
     grad.addColorStop(0.45, "#c8f1ff");
@@ -1497,17 +1445,6 @@ function drawBullets() {
     ctx.fillStyle = grad;
     ctx.beginPath();
     ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
-    ctx.fill();
-
-    // 高光
-    ctx.strokeStyle = "rgba(255,255,255,0.65)";
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.arc(b.x - 1.5, b.y - 1.5, b.r * 0.45, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.fillStyle = "rgba(255,255,255,0.35)";
-    ctx.beginPath();
-    ctx.arc(b.x + 1.5, b.y + 1.2, b.r * 0.18, 0, Math.PI * 2);
     ctx.fill();
   });
 
@@ -1531,7 +1468,6 @@ function drawEnemy(e) {
   const mosquitoTilt = Math.sin(now * 0.018 + e.waveOffset) * 0.18;
   const waspCharge = e.type === "wasp" ? Math.min(1, e.shotCd / 80) : 0;
 
-  // 阴影
   ctx.fillStyle = "rgba(0,0,0,0.22)";
   ctx.beginPath();
   ctx.ellipse(e.w / 2, e.h + 6, e.w * 0.35, 6, 0, 0, Math.PI * 2);
@@ -1541,491 +1477,400 @@ function drawEnemy(e) {
     ctx.fillStyle = "rgba(255,255,255,0.62)";
     ctx.beginPath();
     ctx.ellipse(8, 6 + wingAnim * 1.5, 8, 4, 0.4, 0, Math.PI * 2);
-    ctx.ellipse(24, 6 - wingAnim * 1.5, 8, 4, -0.4, 0, Math.PI * 2);
+    ctx.ellipse(e.w - 8, 6 - wingAnim * 1.5, 8, 4, -0.4, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.fillStyle = "#7a4a24";
+    const bodyGrad = ctx.createLinearGradient(0, 0, e.w, e.h);
+    bodyGrad.addColorStop(0, "#7a322d");
+    bodyGrad.addColorStop(1, "#ff8b6b");
+    ctx.fillStyle = bodyGrad;
     ctx.beginPath();
-    ctx.ellipse(16, 16, 12, 9, 0, 0, Math.PI * 2);
+    ctx.ellipse(e.w / 2, e.h / 2 + bob * 0.8, e.w * 0.28, e.h * 0.34, 0, 0, Math.PI * 2);
     ctx.fill();
-
-    ctx.fillStyle = "#966134";
-    ctx.beginPath();
-    ctx.ellipse(12, 16, 4.5, 7, 0, 0, Math.PI * 2);
-    ctx.ellipse(20, 16, 4.5, 7, 0, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.strokeStyle = "rgba(255,245,220,0.22)";
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(16, 8);
-    ctx.lineTo(16, 24);
-    ctx.stroke();
-  }
-
-  if (e.type === "mosquito") {
-    ctx.save();
-    ctx.translate(10, 14 + bob * 1.5);
+  } else if (e.type === "mosquito") {
     ctx.rotate(mosquitoTilt);
-
-    ctx.strokeStyle = "#d1d5db";
-    ctx.lineWidth = 2;
+    ctx.fillStyle = "rgba(220,245,255,0.45)";
     ctx.beginPath();
-    ctx.moveTo(0, -4);
-    ctx.lineTo(14, -10);
-    ctx.moveTo(0, 2);
-    ctx.lineTo(14, 8);
-    ctx.stroke();
-
-    ctx.fillStyle = "#52525b";
-    ctx.beginPath();
-    ctx.ellipse(0, 0, 7, 5, 0, 0, Math.PI * 2);
+    ctx.ellipse(8, 6, 7, 3, 0.3, 0, Math.PI * 2);
+    ctx.ellipse(e.w - 8, 6, 7, 3, -0.3, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.strokeStyle = "#111827";
+    const bodyGrad = ctx.createLinearGradient(0, 0, e.w, e.h);
+    bodyGrad.addColorStop(0, "#7d241d");
+    bodyGrad.addColorStop(1, "#f16b5c");
+    ctx.fillStyle = bodyGrad;
+    ctx.beginPath();
+    ctx.ellipse(e.w / 2, e.h / 2 + bob, e.w * 0.16, e.h * 0.32, 0, 0, Math.PI * 2);
+    ctx.fill();
+  } else if (e.type === "beetle") {
+    const shellGrad = ctx.createLinearGradient(0, 0, e.w, e.h);
+    shellGrad.addColorStop(0, "#5c1e1e");
+    shellGrad.addColorStop(0.5, "#a33731");
+    shellGrad.addColorStop(1, "#f16b5c");
+    ctx.fillStyle = shellGrad;
+    ctx.beginPath();
+    ctx.ellipse(e.w / 2, e.h / 2 + bob * 0.6, e.w * 0.36, e.h * 0.34, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.strokeStyle = "rgba(255,235,210,0.35)";
     ctx.lineWidth = 1.5;
     ctx.beginPath();
-    ctx.moveTo(-2, 1);
-    ctx.lineTo(-10, 8);
-    ctx.moveTo(0, 1);
-    ctx.lineTo(-8, 10);
-    ctx.moveTo(2, 1);
-    ctx.lineTo(-6, 11);
+    ctx.moveTo(e.w / 2, e.h * 0.18);
+    ctx.lineTo(e.w / 2, e.h * 0.80);
     ctx.stroke();
-
-    ctx.strokeStyle = "#111827";
+  } else if (e.type === "wasp") {
+    ctx.fillStyle = "rgba(255,255,255,0.38)";
     ctx.beginPath();
-    ctx.moveTo(-7, 0);
-    ctx.lineTo(-16, -4 + bob * 0.5);
-    ctx.stroke();
-
-    ctx.fillStyle = "#ef4444";
-    ctx.beginPath();
-    ctx.arc(3, -1, 1.6, 0, Math.PI * 2);
+    ctx.ellipse(9, 7 + wingAnim * 1.8, 8, 3.5, 0.35, 0, Math.PI * 2);
+    ctx.ellipse(e.w - 9, 7 - wingAnim * 1.8, 8, 3.5, -0.35, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.restore();
-  }
-
-  if (e.type === "beetle") {
-    ctx.fillStyle = "#4a2b16";
+    const bodyGrad = ctx.createLinearGradient(0, 0, e.w, e.h);
+    bodyGrad.addColorStop(0, "#6c1f1b");
+    bodyGrad.addColorStop(0.5, "#d35444");
+    bodyGrad.addColorStop(1, "#ffd166");
+    ctx.fillStyle = bodyGrad;
     ctx.beginPath();
-    ctx.ellipse(20, 17 + bob * 0.6, 18, 13, 0, 0, Math.PI * 2);
+    ctx.ellipse(e.w / 2, e.h / 2 + bob * 0.8, e.w * 0.28, e.h * 0.30, 0, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.fillStyle = "#8a4d28";
+    ctx.fillStyle = `rgba(255,230,120,${0.18 + waspCharge * 0.25})`;
     ctx.beginPath();
-    ctx.ellipse(20, 13 + bob * 0.4, 12, 8, 0, 0, Math.PI * 2);
-    ctx.fill();
-
-    const shellLight = ctx.createRadialGradient(15, 10, 1, 15, 10, 16);
-    shellLight.addColorStop(0, "rgba(255,255,255,0.26)");
-    shellLight.addColorStop(1, "rgba(255,255,255,0)");
-    ctx.fillStyle = shellLight;
-    ctx.beginPath();
-    ctx.ellipse(16, 11, 10, 6, -0.3, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.strokeStyle = "rgba(255,235,200,0.18)";
-    ctx.lineWidth = 1.2;
-    ctx.beginPath();
-    ctx.moveTo(20, 6);
-    ctx.lineTo(20, 28);
-    ctx.stroke();
-
-    ctx.strokeStyle = "#2b160d";
-    ctx.beginPath();
-    ctx.moveTo(7, 18);
-    ctx.lineTo(0, 14);
-    ctx.moveTo(8, 22);
-    ctx.lineTo(0, 24);
-    ctx.moveTo(33, 18);
-    ctx.lineTo(40, 14);
-    ctx.moveTo(32, 22);
-    ctx.lineTo(40, 24);
-    ctx.stroke();
-  }
-
-  if (e.type === "wasp") {
-    if (waspCharge > 0.72) {
-      ctx.fillStyle = `rgba(255,120,80,${0.10 + (waspCharge - 0.72) * 0.6})`;
-      ctx.beginPath();
-      ctx.ellipse(18, 16, 22, 16, 0, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    ctx.fillStyle = "rgba(255,255,255,0.55)";
-    ctx.beginPath();
-    ctx.ellipse(11, 7 + bob * 0.6, 10, 4, 0.5, 0, Math.PI * 2);
-    ctx.ellipse(25, 7 - bob * 0.6, 10, 4, -0.5, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.fillStyle = "#fbbf24";
-    ctx.beginPath();
-    ctx.ellipse(18, 16 + bob * 0.4, 14 + waspCharge * 1.5, 10, 0, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.strokeStyle = "#78350f";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(10, 12);
-    ctx.lineTo(27, 12);
-    ctx.moveTo(8, 18);
-    ctx.lineTo(28, 18);
-    ctx.stroke();
-
-    ctx.fillStyle = "#3b2210";
-    ctx.beginPath();
-    ctx.arc(8, 15, 3.2, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.fillStyle = "#ffdca8";
-    ctx.beginPath();
-    ctx.arc(7, 14, 0.9, 0, Math.PI * 2);
-    ctx.arc(9, 14, 0.9, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.strokeStyle = `rgba(255,235,170,${0.15 + waspCharge * 0.35})`;
-    ctx.beginPath();
-    ctx.moveTo(32, 16);
-    ctx.lineTo(41 + waspCharge * 4, 16);
-    ctx.stroke();
-
-    ctx.fillStyle = "#78350f";
-    ctx.beginPath();
-    ctx.moveTo(31, 16);
-    ctx.lineTo(38, 13);
-    ctx.lineTo(38, 19);
-    ctx.closePath();
+    ctx.arc(e.w / 2, e.h / 2, e.w * 0.34 + waspCharge * 4, 0, Math.PI * 2);
     ctx.fill();
   }
-
-  // 通用眼点
-  ctx.fillStyle = "#ef4444";
-  ctx.beginPath();
-  ctx.arc(12, 14, 2, 0, Math.PI * 2);
-  ctx.arc(20, 14, 2, 0, Math.PI * 2);
-  ctx.fill();
 
   ctx.restore();
 }
 
-function drawBoss() {
+function drawBossVariant(boss) {
   if (!boss) return;
-  ctx.save();
-  const breath = 1 + Math.sin(performance.now() * 0.003) * 0.04;
-  ctx.translate(boss.x + boss.w * (1 - breath) * 0.5, boss.y + boss.h * (1 - breath) * 0.5);
-  ctx.scale(breath, breath);
 
-  ctx.fillStyle = "rgba(239, 68, 68, 0.14)";
+  const bx = boss.x;
+  const by = boss.y;
+  const bw = boss.w;
+  const bh = boss.h;
+  const cx = bx + bw * 0.5;
+  const cy = by + bh * 0.5;
+  const flap = Math.sin(performance.now() * 0.012) * 0.5;
+
+  ctx.fillStyle = "rgba(0,0,0,0.18)";
   ctx.beginPath();
-  ctx.arc(75, 62, 80, 0, Math.PI * 2);
+  ctx.ellipse(cx, by + bh * 0.92, bw * 0.34, bh * 0.10, 0, 0, Math.PI * 2);
   ctx.fill();
 
-  ctx.fillStyle = "#6b3a20";
-  ctx.beginPath();
-  ctx.ellipse(75, 62, 56, 42, 0, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.fillStyle = "#8a4d28";
-  ctx.beginPath();
-  ctx.ellipse(75, 49, 34, 24, 0, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.strokeStyle = "#4d2816";
-  ctx.lineWidth = 5;
-  for (let i = -2; i <= 2; i++) {
+  if (boss.stage === 0) {
+    const wingGlow = ctx.createRadialGradient(cx, cy, 8, cx, cy, bw * 0.65);
+    wingGlow.addColorStop(0, "rgba(255,255,255,0.10)");
+    wingGlow.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.fillStyle = wingGlow;
     ctx.beginPath();
-    ctx.moveTo(75 + i * 16, 70);
-    ctx.lineTo(75 + i * 21, 102);
+    ctx.ellipse(cx, cy, bw * 0.70, bh * 0.42, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = "rgba(210,245,255,0.34)";
+    ctx.beginPath();
+    ctx.ellipse(cx - bw * 0.10, cy - bh * 0.18, bw * 0.34, bh * 0.16, -0.42 + flap * 0.08, 0, Math.PI * 2);
+    ctx.ellipse(cx + bw * 0.12, cy - bh * 0.18, bw * 0.34, bh * 0.16, 0.42 - flap * 0.08, 0, Math.PI * 2);
+    ctx.ellipse(cx - bw * 0.08, cy + bh * 0.16, bw * 0.30, bh * 0.13, -0.22 + flap * 0.06, 0, Math.PI * 2);
+    ctx.ellipse(cx + bw * 0.10, cy + bh * 0.16, bw * 0.30, bh * 0.13, 0.22 - flap * 0.06, 0, Math.PI * 2);
+    ctx.fill();
+
+    const bodyGrad = ctx.createLinearGradient(bx, cy, bx + bw, cy);
+    bodyGrad.addColorStop(0, "#7a322d");
+    bodyGrad.addColorStop(0.55, "#c45443");
+    bodyGrad.addColorStop(1, "#ff8b6b");
+    ctx.fillStyle = bodyGrad;
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, bw * 0.26, bh * 0.20, 0, 0, Math.PI * 2);
+    ctx.fill();
+  } else if (boss.stage === 1) {
+    const shellGrad = ctx.createLinearGradient(bx, by, bx + bw, by + bh);
+    shellGrad.addColorStop(0, "#5c1e1e");
+    shellGrad.addColorStop(0.5, "#a33731");
+    shellGrad.addColorStop(1, "#f16b5c");
+    ctx.fillStyle = shellGrad;
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, bw * 0.36, bh * 0.28, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.strokeStyle = "rgba(255,235,210,0.35)";
+    ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - bh * 0.26);
+    ctx.lineTo(cx, cy + bh * 0.26);
+    ctx.moveTo(cx - bw * 0.14, cy - bh * 0.18);
+    ctx.lineTo(cx + bw * 0.14, cy - bh * 0.18);
+    ctx.moveTo(cx - bw * 0.18, cy);
+    ctx.lineTo(cx + bw * 0.18, cy);
+    ctx.moveTo(cx - bw * 0.14, cy + bh * 0.18);
+    ctx.lineTo(cx + bw * 0.14, cy + bh * 0.18);
     ctx.stroke();
+  } else {
+    const leviGrad = ctx.createLinearGradient(bx, by, bx + bw, by + bh);
+    leviGrad.addColorStop(0, "#4d1414");
+    leviGrad.addColorStop(0.45, "#8f2320");
+    leviGrad.addColorStop(1, "#ff755f");
+    ctx.fillStyle = leviGrad;
+    ctx.beginPath();
+    ctx.ellipse(cx - bw * 0.06, cy, bw * 0.42, bh * 0.30, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = "#6a1a18";
+    ctx.beginPath();
+    ctx.ellipse(cx + bw * 0.24, cy, bw * 0.18, bh * 0.18, 0, 0, Math.PI * 2);
+    ctx.fill();
   }
-
-  ctx.fillStyle = "#ef4444";
-  ctx.beginPath();
-  ctx.arc(58, 49, 6, 0, Math.PI * 2);
-  ctx.arc(92, 49, 6, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Glow pulse effect
-  const pulse = 0.25 + Math.sin(performance.now() * 0.004) * 0.15;
-  ctx.fillStyle = `rgba(255,80,80,${pulse})`;
-  ctx.beginPath();
-  ctx.arc(75, 62, 68, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.restore();
-
-  ctx.fillStyle = "rgba(255,255,255,0.16)";
-  ctx.fillRect(150, 18, 620, 14);
-  const hpGrad = ctx.createLinearGradient(150, 0, 770, 0);
-  hpGrad.addColorStop(0, "#fb923c");
-  hpGrad.addColorStop(1, "#fb7185");
-  ctx.fillStyle = hpGrad;
-  ctx.fillRect(150, 18, 620 * (boss.hp / boss.maxHp), 14);
-  ctx.strokeStyle = "rgba(255,255,255,0.24)";
-  ctx.strokeRect(150, 18, 620, 14);
 }
 
-function drawPowerUps() {
+function drawHUD() {
+  if (boss) {
+    const barW = 320;
+    const barH = 14;
+    const x = W / 2 - barW / 2;
+    const y = 20;
+    ctx.fillStyle = "rgba(0,0,0,0.28)";
+    ctx.fillRect(x, y, barW, barH);
+
+    const hpRatio = Math.max(0, boss.hp / boss.maxHp);
+    const g = ctx.createLinearGradient(x, y, x + barW, y);
+    g.addColorStop(0, "#f87171");
+    g.addColorStop(1, "#ef4444");
+    ctx.fillStyle = g;
+    ctx.fillRect(x, y, barW * hpRatio, barH);
+
+    ctx.strokeStyle = "rgba(255,255,255,0.22)";
+    ctx.strokeRect(x, y, barW, barH);
+
+    ctx.fillStyle = "rgba(255,240,220,0.95)";
+    ctx.font = "bold 14px system-ui";
+    ctx.fillText(`BOSS ${boss.stage + 1}`, x, y - 8);
+  }
+
+  if (wingmanUntil > performance.now()) {
+    const warningFlash = wingmanWarningUntil > performance.now();
+    ctx.fillStyle = warningFlash ? "rgba(255,190,120,0.98)" : "rgba(253,230,138,0.95)";
+    ctx.font = "bold 14px system-ui";
+    ctx.fillText(warningFlash ? "僚机即将结束" : "僚机支援中", 24, 56);
+  }
+
+  if (!bossDefeated) {
+    ctx.fillStyle = "rgba(220,255,230,0.92)";
+    ctx.font = "bold 14px system-ui";
+    ctx.fillText(`池塘 Boss 进度：${Math.min(bossStage + (boss ? 1 : 0), 3)} / 3`, 24, 80);
+  }
+
+  ctx.textAlign = "right";
+  ctx.fillStyle = "rgba(245,255,250,0.96)";
+  ctx.font = "bold 14px system-ui";
+  ctx.fillText(`分数 ${score}`, W - 80, 34);
+  ctx.fillText(`生命 ${lives}`, W - 80, 56);
+  ctx.fillText(`最高分 ${bestScore}`, W - 80, 78);
+  ctx.textAlign = "left";
+
+  if (!boss && performance.now() < bossCooldownUntil && !bossDefeated) {
+    ctx.fillStyle = "rgba(186,247,202,0.92)";
+    ctx.font = "bold 14px system-ui";
+    ctx.fillText("Boss 已击败，池塘短暂恢复中……", 24, 104);
+  }
+}
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+
+  if (screenShake > 0) {
+    ctx.save();
+    ctx.translate((Math.random() - 0.5) * screenShake, (Math.random() - 0.5) * screenShake);
+    screenShake *= 0.88;
+  } else {
+    ctx.save();
+  }
+
+  drawPond();
+
   powerUps.forEach(p => {
     ctx.save();
     ctx.translate(p.x, p.y);
+    const pulse = 1 + Math.sin(performance.now() * 0.01 + p.phase) * 0.08;
+    ctx.scale(pulse, pulse);
     if (p.kind === "heart") {
-      ctx.fillStyle = "#fb7185";
+      ctx.fillStyle = "#ff8ba7";
       ctx.beginPath();
-      ctx.arc(-4, -2, 6, 0, Math.PI * 2);
-      ctx.arc(4, -2, 6, 0, Math.PI * 2);
-      ctx.lineTo(0, 10);
+      ctx.arc(-12, 0, 12, 0, Math.PI * 2);
+      ctx.arc(12, 0, 12, 0, Math.PI * 2);
+      ctx.lineTo(0, 30);
       ctx.closePath();
       ctx.fill();
-    } else if (p.kind === "wingman") {
-      ctx.fillStyle = "#fde68a";
+    } else if (p.kind === "bubble") {
+      ctx.fillStyle = "rgba(180,235,255,0.65)";
       ctx.beginPath();
-      ctx.moveTo(0, -10);
-      ctx.lineTo(10, 10);
-      ctx.lineTo(0, 5);
-      ctx.lineTo(-10, 10);
-      ctx.closePath();
+      ctx.arc(0, 0, 27, 0, Math.PI * 2);
       ctx.fill();
     } else {
-      ctx.fillStyle = "#7dd3fc";
+      ctx.fillStyle = "#fde68a";
       ctx.beginPath();
-      ctx.arc(0, 0, 9, 0, Math.PI * 2);
+      ctx.arc(0, 0, 30, 0, Math.PI * 2);
       ctx.fill();
-      ctx.strokeStyle = "rgba(255,255,255,0.6)";
-      ctx.beginPath();
-      ctx.arc(-2, -2, 3, 0, Math.PI * 2);
-      ctx.stroke();
     }
     ctx.restore();
   });
-}
 
-function drawParticles() {
+  enemies.forEach(drawEnemy);
+  if (boss) drawBossVariant(boss);
+  drawBullets();
+  drawFrog();
+
   particles.forEach(p => {
-    ctx.globalAlpha = Math.max(p.life / 32, 0);
     ctx.fillStyle = p.color;
     ctx.beginPath();
     ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
     ctx.fill();
-    ctx.globalAlpha = 1;
   });
-}
 
-function drawRoundRectPath(x, y, w, h, r) {
-  const radius = Math.min(r, w / 2, h / 2);
-  ctx.beginPath();
-  ctx.moveTo(x + radius, y);
-  ctx.arcTo(x + w, y, x + w, y + h, radius);
-  ctx.arcTo(x + w, y + h, x, y + h, radius);
-  ctx.arcTo(x, y + h, x, y, radius);
-  ctx.arcTo(x, y, x + w, y, radius);
-  ctx.closePath();
-}
-
-function draw() {
-  ctx.save();
-  if (screenShake > 0) {
-    const dx = (Math.random() - 0.5) * screenShake;
-    const dy = (Math.random() - 0.5) * screenShake;
-    ctx.translate(dx, dy);
-    screenShake *= 0.85;
-    if (screenShake < 0.5) screenShake = 0;
-  }
-
-  drawPond();
-  drawBullets();
-  enemies.forEach(drawEnemy);
-  drawBoss();
-  drawPowerUps();
-  drawParticles();
-  drawFrog();
-
-  if (!started) {
-    ctx.fillStyle = "rgba(0,0,0,0.20)";
+  if (hitFlash > 0) {
+    ctx.fillStyle = `rgba(255,255,255,${0.03 * hitFlash})`;
     ctx.fillRect(0, 0, W, H);
-  }
-
-  if (combo >= 3) {
-    ctx.fillStyle = "rgba(255,255,255,0.96)";
-    ctx.font = "bold 18px system-ui";
-    ctx.shadowColor = "rgba(125,211,252,0.85)";
-    ctx.shadowBlur = 14;
-    ctx.fillText("COMBO x" + combo, 24, 34);
-    ctx.shadowBlur = 0;
-  }
-
-  if (wingmanUntil > performance.now()) {
-    ctx.fillStyle = "rgba(253,230,138,0.95)";
-    ctx.font = "bold 14px system-ui";
-    ctx.fillText("僚机支援中", 24, 56);
   }
 
   if (gameOver) {
-    ctx.fillStyle = "rgba(0,0,0,0.52)";
+    ctx.fillStyle = "rgba(0,0,0,0.38)";
     ctx.fillRect(0, 0, W, H);
-
-    ctx.fillStyle = "rgba(255,255,255,0.95)";
-    ctx.textAlign = "center";
-    ctx.font = "bold 34px system-ui";
-    ctx.fillText("游戏结束", W / 2, H / 2 - 36);
-
-    ctx.font = "20px system-ui";
-    ctx.fillText("最终得分：" + score, W / 2, H / 2 + 4);
-
-    ctx.fillStyle = "rgba(125, 211, 252, 0.95)";
-    drawRoundRectPath(W / 2 - 120, H / 2 + 36, 240, 52, 14);
-    ctx.fill();
-
-    ctx.fillStyle = "#062033";
-    ctx.font = "bold 22px system-ui";
-    ctx.fillText("按 Enter 或点这里重开", W / 2, H / 2 + 70);
-
-    ctx.textAlign = "start";
+    ctx.fillStyle = "#fff";
+    ctx.font = "bold 42px system-ui";
+    ctx.fillText("游戏结束", W / 2 - 84, H / 2 - 10);
+    ctx.font = "18px system-ui";
+    ctx.fillText("请使用下方面板重新挑战或返回开头", W / 2 - 150, H / 2 + 26);
   }
 
-  if (hitFlash > 0) {
-    ctx.fillStyle = `rgba(255,255,255,${hitFlash * 0.035})`;
-    ctx.fillRect(0, 0, W, H);
-  }
-
+  drawHUD();
   ctx.restore();
 }
-startButton.addEventListener("click", () => {
-  startGameSession();
-});
-
-startButton.addEventListener("touchstart", e => {
-  e.preventDefault();
-  startGameSession();
-}, { passive: false });
 
 function loop() {
-  if (slowMoTimer > 0) {
-    slowMoFrameToggle = !slowMoFrameToggle;
-    if (slowMoFrameToggle) update();
-    slowMoTimer--;
-  } else {
-    update();
-  }
+  update();
   draw();
   requestAnimationFrame(loop);
 }
 
-function refocusGame() {
-  setTimeout(() => { canvas.focus(); }, 0);
-  setTimeout(() => { canvas.focus(); }, 120);
-}
+startButton.onclick = null;
+startButton.addEventListener("pointerdown", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  startGameSession();
+}, { passive: false });
 
-document.addEventListener("keydown", e => {
-  if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Space"].includes(e.code)) {
-    e.preventDefault();
-  }
-  keys[e.code] = true;
-  if (e.code === "ShiftLeft" || e.code === "ShiftRight") startDash();
-  if (pendingRestart && (e.code === "Enter" || e.code === "Space")) {
-    location.reload();
-  }
+startButton.addEventListener("click", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  startGameSession();
 });
 
-document.addEventListener("keyup", e => {
+chapterButton.addEventListener("pointerdown", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  returnToStartMenu();
+}, { passive: false });
+
+chapterButton.addEventListener("click", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  returnToStartMenu();
+});
+
+restartButton.addEventListener("pointerdown", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  startGameSession();
+}, { passive: false });
+
+restartButton.addEventListener("click", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  startGameSession();
+});
+
+backToMenuButton.addEventListener("pointerdown", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  returnToStartMenu();
+}, { passive: false });
+
+backToMenuButton.addEventListener("click", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  returnToStartMenu();
+});
+
+devToggle.addEventListener("click", () => {
+  devPanel.classList.toggle("hidden");
+});
+devInvincibleBtn.addEventListener("click", () => {
+  invincibleMode = !invincibleMode;
+  updateDevUI();
+});
+devAdd100Btn.addEventListener("click", () => applyScoreDelta(100));
+devTo500Btn.addEventListener("click", () => setScoreForTesting(500));
+devTo1000Btn.addEventListener("click", () => setScoreForTesting(1000));
+
+window.addEventListener("keydown", (e) => {
+  keys[e.code] = true;
+  if (!started && (e.key === "Enter" || e.code === "Space")) {
+    e.preventDefault();
+    startGameSession();
+  }
+  if (chapterCleared && (e.key === "Enter" || e.code === "Space")) {
+    e.preventDefault();
+    returnToStartMenu();
+  }
+});
+window.addEventListener("keyup", (e) => {
   keys[e.code] = false;
 });
 
-canvas.addEventListener("mousemove", e => {
-  const pos = getCanvasPos(e.clientX, e.clientY);
-  pointer.x = pos.x;
-  pointer.y = pos.y;
-  pointer.active = true;
-});
-
-canvas.addEventListener("mousedown", e => {
-  if (pendingRestart) {
-    const pos = getCanvasPos(e.clientX, e.clientY);
-    const clickX = pos.x;
-    const clickY = pos.y;
-    const btnX = W / 2 - 120;
-    const btnY = H / 2 + 36;
-    const btnW = 240;
-    const btnH = 52;
-    if (clickX >= btnX && clickX <= btnX + btnW && clickY >= btnY && clickY <= btnY + btnH) {
-      location.reload();
-      return;
-    }
-  }
-
-  const pos = getCanvasPos(e.clientX, e.clientY);
-  pointer.x = pos.x;
-  pointer.y = pos.y;
-  pointer.active = true;
-  autoFire = true;
-  refocusGame();
-});
-
-window.addEventListener("mouseup", () => {
-  autoFire = false;
-});
-
-canvas.addEventListener("mouseleave", () => {
-  autoFire = false;
-  pointer.active = false;
-});
-
-
-leftPad.addEventListener("touchstart", e => {
+leftPad.addEventListener("pointerdown", (e) => {
   e.preventDefault();
-  const t = e.changedTouches[0];
-  if (!t) return;
-  const rect = leftPad.getBoundingClientRect();
-  joystick.baseX = rect.left + rect.width / 2;
-  joystick.baseY = rect.top + rect.height / 2;
   joystick.active = true;
-  joystick.touchId = t.identifier;
-  applyJoystickFromTouch(t);
-  refocusGame();
-}, { passive: false });
+  joystick.touchId = e.pointerId;
+  joystick.baseX = e.clientX;
+  joystick.baseY = e.clientY;
+  leftPad.setPointerCapture(e.pointerId);
+});
+leftPad.addEventListener("pointermove", (e) => {
+  if (!joystick.active || e.pointerId !== joystick.touchId) return;
+  applyJoystickFromTouch(e);
+});
+leftPad.addEventListener("pointerup", (e) => {
+  if (e.pointerId !== joystick.touchId) return;
+  resetJoystick();
+});
+leftPad.addEventListener("pointercancel", resetJoystick);
 
-window.addEventListener("touchmove", e => {
-  if (!joystick.active) return;
-  const t = Array.from(e.touches).find(item => item.identifier === joystick.touchId);
-  if (!t) return;
-  e.preventDefault();
-  applyJoystickFromTouch(t);
-}, { passive: false });
-
-window.addEventListener("touchend", e => {
-  if (!joystick.active) return;
-  const ended = Array.from(e.changedTouches).some(item => item.identifier === joystick.touchId);
-  if (ended) resetJoystick();
-}, { passive: false });
-
-window.addEventListener("touchcancel", e => {
-  if (!joystick.active) return;
-  const ended = Array.from(e.changedTouches).some(item => item.identifier === joystick.touchId);
-  if (ended) resetJoystick();
-}, { passive: false });
-
-document.addEventListener("gesturestart", e => e.preventDefault());
-
-window.addEventListener("load", () => {
+canvas.addEventListener("pointerdown", (e) => {
+  const pos = getCanvasPos(e.clientX, e.clientY);
+  pointer.x = pos.x;
+  pointer.y = pos.y;
+  pointer.active = true;
+  pointer.down = true;
+  autoFire = true;
+  canvas.focus();
+});
+canvas.addEventListener("pointermove", (e) => {
+  const pos = getCanvasPos(e.clientX, e.clientY);
+  pointer.x = pos.x;
+  pointer.y = pos.y;
+});
+window.addEventListener("pointerup", () => {
+  pointer.down = false;
   pointer.active = false;
-  autoFire = false;
-  refocusGame();
+  if (!chapterCleared && started) autoFire = true;
 });
 
-window.addEventListener("pageshow", () => {
-  pointer.active = false;
-  if (!started) autoFire = false;
-  refocusGame();
-});
-
-canvas.addEventListener("mouseenter", () => {
-  refocusGame();
-});
-
-updateLeftStickVisual();
+canvas.style.pointerEvents = "none";
+setBattleLayout(false);
+updateDevUI();
 updateUI();
+window.addEventListener("resize", resizeCanvasForFullscreen);
+resizeCanvasForFullscreen();
 loop();
 </script>
 </body>
