@@ -1,0 +1,175 @@
+html,
+body{
+    margin:0;
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#173d1a;
+    font-family:sans-serif;
+    overscroll-behavior:none;
+}
+
+#game{
+    position:fixed;
+    inset:0;
+    display:block;
+    width:100%;
+    height:100%;
+    touch-action:none;
+}
+
+.boot-overlay{
+    position:fixed;
+    inset:0;
+    z-index:20;
+    display:grid;
+    place-items:center;
+    gap:18px;
+    padding:24px;
+    color:#efffe8;
+    background:
+        radial-gradient(circle at 50% 34%, rgba(165,228,196,0.18), transparent 28%),
+        linear-gradient(180deg, rgba(31,82,70,0.98), rgba(10,30,34,0.98)),
+        #173d1a;
+    transition:opacity 420ms ease, visibility 420ms ease;
+}
+
+.boot-overlay.boot-hidden{
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+}
+
+.boot-scene{
+    position:relative;
+    width:min(54vw, 220px);
+    aspect-ratio:1;
+}
+
+.boot-ripple{
+    position:absolute;
+    inset:16%;
+    border:2px solid rgba(192,244,182,0.24);
+    border-radius:50%;
+    animation:boot-ripple 1900ms ease-out infinite;
+}
+
+.boot-ripple-b{
+    animation-delay:680ms;
+}
+
+.boot-frog{
+    position:absolute;
+    left:50%;
+    top:48%;
+    width:86px;
+    height:62px;
+    transform:translate(-50%, -50%);
+    border-radius:48% 48% 42% 42%;
+    background:linear-gradient(180deg, #a9e36d, #4f9b46);
+    box-shadow:
+        inset 0 -10px 0 rgba(21,72,34,0.25),
+        0 18px 22px rgba(4,18,12,0.28);
+    animation:boot-breathe 1300ms ease-in-out infinite;
+}
+
+.boot-frog::after{
+    content:"";
+    position:absolute;
+    left:20px;
+    right:20px;
+    bottom:17px;
+    height:8px;
+    border-bottom:3px solid rgba(16,54,27,0.58);
+    border-radius:50%;
+}
+
+.boot-eye{
+    position:absolute;
+    top:-8px;
+    width:24px;
+    height:24px;
+    border-radius:50%;
+    background:#efffe8;
+    border:3px solid #4f9b46;
+}
+
+.boot-eye::after{
+    content:"";
+    position:absolute;
+    left:8px;
+    top:8px;
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:#173d1a;
+}
+
+.boot-eye-left{
+    left:14px;
+}
+
+.boot-eye-right{
+    right:14px;
+}
+
+.boot-pad{
+    position:absolute;
+    bottom:34px;
+    width:52px;
+    height:28px;
+    border-radius:54% 48% 56% 42%;
+    background:rgba(127,188,92,0.42);
+    transform:rotate(-16deg);
+}
+
+.boot-pad-left{
+    left:14px;
+}
+
+.boot-pad-right{
+    right:10px;
+    transform:rotate(18deg);
+}
+
+.boot-copy{
+    align-self:start;
+    margin-top:-26px;
+    text-align:center;
+}
+
+.boot-title{
+    font-size:clamp(28px, 8vw, 54px);
+    font-weight:800;
+    letter-spacing:0;
+    line-height:1;
+}
+
+.boot-status{
+    min-height:24px;
+    margin-top:12px;
+    color:rgba(222,252,238,0.78);
+    font-size:15px;
+}
+
+@keyframes boot-ripple{
+    from{
+        opacity:0.56;
+        transform:scale(0.58);
+    }
+    to{
+        opacity:0;
+        transform:scale(1.18);
+    }
+}
+
+@keyframes boot-breathe{
+    0%, 100%{
+        transform:translate(-50%, -50%) translateY(0) scale(1, 1);
+    }
+    50%{
+        transform:translate(-50%, -50%) translateY(-5px) scale(1.04, 0.97);
+    }
+}
