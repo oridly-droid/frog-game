@@ -7,7 +7,7 @@ import { playerConfig } from "./player_config.js"
 import { enemyStats } from "./enemy_config.js"
 
 export const GAME_TITLE = "青蛙乐园 v0.3"
-export const BUILD_ID = "v0.3-build-032-spritefix-002"
+export const BUILD_ID = "v0.3-build-032-localfreeze-001"
 
 export const bushAnchors = [
     {nx:0.12, ny:0.18, scale:1.05},

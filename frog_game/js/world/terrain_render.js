@@ -26,8 +26,14 @@ import { traceSmoothPath, roundedRectPath } from "../core/utils.js"
 
 export const terrainRenderProfile = {
     layerScale:1,
-    mobileOptimized:false
+    mobileOptimized:false,
+    layerPixels:0,
+    layerMemoryMB:0
 }
+
+const DESKTOP_LAYER_PIXEL_BUDGET = 12000000
+const MOBILE_LAYER_PIXEL_BUDGET = 7000000
+const MIN_LAYER_SCALE = 0.32
 
 const TERRAIN_PREFAB_SOURCES = {
     rock_cluster:"../../prototypes/assets/frog_warrior_v2/rock_cluster.png",
@@ -341,11 +347,11 @@ function drawTerrainPrefab(context, placement){
 }
 
 function getTerrainLayerScale(){
-    if(!mobile.active){
-        return 1
-    }
-
-    return 0.36
+    const worldPixels = Math.max(1, world.width * world.height)
+    const pixelBudget = mobile.active ? MOBILE_LAYER_PIXEL_BUDGET : DESKTOP_LAYER_PIXEL_BUDGET
+    const budgetScale = Math.sqrt(pixelBudget / worldPixels)
+    const scale = Math.min(1, budgetScale)
+    return Math.max(MIN_LAYER_SCALE, scale)
 }
 
 function prepareLayerContext(layer, layerCtx){
@@ -1276,6 +1282,8 @@ export function resizeLayers(){
 
     const scaledWidth = Math.max(1, Math.ceil(world.width * terrainRenderProfile.layerScale))
     const scaledHeight = Math.max(1, Math.ceil(world.height * terrainRenderProfile.layerScale))
+    terrainRenderProfile.layerPixels = scaledWidth * scaledHeight
+    terrainRenderProfile.layerMemoryMB = Number((terrainRenderProfile.layerPixels * 4 / 1024 / 1024).toFixed(2))
 
     backgroundLayer.width = scaledWidth
     backgroundLayer.height = scaledHeight
