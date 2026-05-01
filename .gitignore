@@ -1,0 +1,16 @@
+.DS_Store
+node_modules/
+
+# Temporary backups and local scratch output
+.codex_tmp/
+backups/
+*_backup*/
+*backup*/
+*.bak
+*.tmp
+
+# Large or unrelated cache/output directories
+.cache/
+cache/
+output/
+autonomous_screenshots/

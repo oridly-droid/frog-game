@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Frog Warrior V2 Silhouette Test 01</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="./frog_warrior_v2_silhouette_test.css">
+</head>
+<body>
+<canvas id="prototype-canvas" aria-label="蛙战士 V2 剪影测试"></canvas>
+
+<section class="overlay top-left">
+  <div class="title">Prototype: Frog Warrior V2 Silhouette Test 01</div>
+  <div class="line">目标：只验证轮廓、比例、前倾与扑斩方向</div>
+  <div class="line">切换：点击按钮或按 1 / 2 / 3</div>
+  <div class="line">要求：像会战斗的蛙，不像人类剑士</div>
+</section>
+
+<section class="overlay top-right">
+  <div class="line">姿态 1：待机剪影</div>
+  <div class="line">姿态 2：前倾行走剪影</div>
+  <div class="line">姿态 3：第二段前扑斩剪影</div>
+</section>
+
+<section class="pose-panel">
+  <button type="button" class="pose-btn active" data-pose="idle">1 待机剪影</button>
+  <button type="button" class="pose-btn" data-pose="walk">2 前倾行走</button>
+  <button type="button" class="pose-btn" data-pose="pounce">3 前扑斩</button>
+</section>
+
+<script type="module" src="./frog_warrior_v2_silhouette_test.js"></script>
+</body>
+</html>

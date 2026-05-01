@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Frog Warrior V2 Test 02</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="./frog_warrior_v2_test.css">
+</head>
+<body>
+<canvas id="prototype-canvas"></canvas>
+
+<div class="overlay top-left">
+  <div class="title">Prototype: Frog Warrior V2 Test 02</div>
+  <div class="line">移动：A / D 或 方向键</div>
+  <div class="line">跳跃：空格 / W / ↑</div>
+  <div class="line">冲刺：Shift / K</div>
+  <div class="line">普攻：J / 鼠标左键</div>
+</div>
+
+<div class="overlay top-right">
+  <div class="line">图1外形 + 图2可读性</div>
+  <div class="line">图3蛙类发力 + 图4动作包</div>
+</div>
+
+<div class="touch-controls" aria-hidden="true">
+  <button class="touch-btn move" data-action="left">左</button>
+  <button class="touch-btn move" data-action="right">右</button>
+  <button class="touch-btn action" data-action="jump">跳</button>
+  <button class="touch-btn action" data-action="dash">冲</button>
+  <button class="touch-btn action attack" data-action="attack">斩</button>
+</div>
+
+<script type="module" src="./frog_warrior_v2_test.js"></script>
+</body>
+</html>

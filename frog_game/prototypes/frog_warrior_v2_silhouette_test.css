@@ -1,0 +1,137 @@
+:root {
+  color-scheme: dark;
+  --bg-top: #d8d0bc;
+  --bg-bottom: #b39f77;
+  --shadow: rgba(14, 17, 14, 0.18);
+  --panel: rgba(18, 23, 18, 0.7);
+  --panel-border: rgba(255, 255, 255, 0.08);
+  --text: #f3efde;
+  --text-dim: rgba(243, 239, 222, 0.78);
+  --accent: #d8c78f;
+}
+
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 88%, rgba(66, 86, 58, 0.16) 0%, rgba(66, 86, 58, 0) 26%),
+    linear-gradient(180deg, var(--bg-top) 0%, #c3b08a 42%, var(--bg-bottom) 100%);
+  font-family: "SF Pro SC", "PingFang SC", "Noto Sans SC", sans-serif;
+}
+
+body {
+  position: relative;
+}
+
+#prototype-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.overlay,
+.pose-panel {
+  position: absolute;
+  z-index: 2;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 20px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.16);
+}
+
+.overlay {
+  max-width: min(34vw, 420px);
+  padding: 16px 18px;
+  color: var(--text);
+}
+
+.top-left {
+  top: 24px;
+  left: 24px;
+}
+
+.top-right {
+  top: 24px;
+  right: 24px;
+}
+
+.title {
+  margin-bottom: 8px;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--accent);
+}
+
+.line {
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--text-dim);
+}
+
+.pose-panel {
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  padding: 12px;
+}
+
+.pose-btn {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  background: rgba(238, 227, 193, 0.1);
+  color: var(--text);
+  padding: 12px 18px;
+  font: inherit;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 120ms ease, transform 120ms ease, border-color 120ms ease;
+}
+
+.pose-btn:hover,
+.pose-btn:focus-visible {
+  outline: none;
+  background: rgba(238, 227, 193, 0.16);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.pose-btn.active {
+  background: rgba(226, 209, 152, 0.22);
+  border-color: rgba(255, 255, 255, 0.32);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 900px) {
+  .overlay {
+    max-width: calc(50vw - 28px);
+    padding: 12px 14px;
+    border-radius: 16px;
+  }
+
+  .title {
+    font-size: 15px;
+  }
+
+  .line {
+    font-size: 12px;
+  }
+
+  .pose-panel {
+    width: calc(100% - 28px);
+    bottom: 14px;
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .pose-btn {
+    flex: 1;
+    min-width: 0;
+    padding: 12px 10px;
+    font-size: 13px;
+  }
+}

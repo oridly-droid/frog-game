@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Frog Warrior V2 Topdown Test</title>
+<link rel="icon" href="data:,">
+<script>
+window.BUILD_VERSION = "2026-03-24-topdown-06";
+document.title = `Frog Warrior V2 Topdown Test - ${window.BUILD_VERSION}`;
+const cssLink = document.createElement("link");
+cssLink.rel = "stylesheet";
+cssLink.href = `./frog_warrior_v2_topdown_test.css?v=${encodeURIComponent(window.BUILD_VERSION)}`;
+document.head.appendChild(cssLink);
+</script>
+</head>
+<body>
+<canvas id="prototype-canvas"></canvas>
+
+<div id="build-badge" class="build-badge" aria-label="版本号"></div>
+
+<div class="overlay top-left">
+  <div class="title">Prototype: Frog Warrior V2 Topdown Test 01</div>
+  <div class="line">移动：W / A / S / D 或方向键</div>
+  <div class="line">冲刺：Shift / K</div>
+  <div class="line">普攻：J / 鼠标左键</div>
+  <div class="line">群攻：L</div>
+  <div class="line">跳跃：本页停用，专注俯视替代测试</div>
+</div>
+
+<div class="overlay top-right">
+  <div class="line">目标：验证俯视四向移动主角替代方向</div>
+  <div class="line">状态：待机 / 移动 / 攻击</div>
+  <div class="line">当前状态：<span id="debug-state">idle</span></div>
+  <div class="line">direction：<span id="debug-direction">down</span></div>
+  <div class="line">moveFrameIndex：<span id="debug-move-frame-index">0</span></div>
+  <div class="line">moveAnimTime：<span id="debug-move-anim-time">0.00</span></div>
+  <div class="line">目标资源：<span id="debug-target-sprite">frog_main_idle.png</span></div>
+  <div class="line">实际资源：<span id="debug-actual-sprite">frog_main_idle.png</span></div>
+  <div class="line">版本：<span id="debug-build">-</span></div>
+</div>
+
+<div class="touch-controls" aria-hidden="true">
+  <div class="dpad">
+    <button class="touch-btn move up" data-action="up">上</button>
+    <div class="dpad-row">
+      <button class="touch-btn move" data-action="left">左</button>
+      <button class="touch-btn move" data-action="down">下</button>
+      <button class="touch-btn move" data-action="right">右</button>
+    </div>
+  </div>
+  <div class="actions">
+    <button class="touch-btn action" data-action="dash">冲</button>
+    <button class="touch-btn action" data-action="aoe">群</button>
+    <button class="touch-btn action attack" data-action="attack">斩</button>
+  </div>
+</div>
+
+<script type="module">
+import(`./frog_warrior_v2_topdown_test.js?v=${encodeURIComponent(window.BUILD_VERSION)}`);
+</script>
+</body>
+</html>
