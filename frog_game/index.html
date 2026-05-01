@@ -4,11 +4,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>青蛙乐园 v0.3 [CURRENT] - v0.3-build-032</title>
-<link rel="stylesheet" href="./css/game.css?v=v0.3-build-032">
+    <title>青蛙乐园 v0.3 [CURRENT] - v0.3-build-032-spritefix-002</title>
+<link rel="stylesheet" href="./css/game.css?v=v0.3-build-032-spritefix-002">
 </head>
 <body>
-<canvas id="game"></canvas>
-<script type="module" src="./js/main.js?v=v0.3-build-032"></script>
+<canvas id="game" aria-label="青蛙乐园"></canvas>
+<div id="bootOverlay" class="boot-overlay" aria-live="polite">
+    <div class="boot-scene" aria-hidden="true">
+        <div class="boot-ripple boot-ripple-a"></div>
+        <div class="boot-ripple boot-ripple-b"></div>
+        <div class="boot-frog">
+            <span class="boot-eye boot-eye-left"></span>
+            <span class="boot-eye boot-eye-right"></span>
+        </div>
+        <div class="boot-pad boot-pad-left"></div>
+        <div class="boot-pad boot-pad-right"></div>
+    </div>
+    <div class="boot-copy">
+        <div class="boot-title">青蛙乐园</div>
+        <div id="bootStatus" class="boot-status">正在进入池塘</div>
+    </div>
+</div>
+<script type="module" src="./js/main.js?v=v0.3-build-032-spritefix-002"></script>
 </body>
 </html>

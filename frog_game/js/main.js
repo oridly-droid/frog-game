@@ -38,6 +38,7 @@ import {
     renderTerrainOverlayLayer,
 } from "./world/terrain_render.js"
 import { grantXP } from "./entities/frog.js"
+import { waitForInitialFrogSpriteReady } from "./entities/frog_render.js"
 import { buildTreasures, setTreasureEventHandler } from "./entities/treasures.js"
 import { buildPlants } from "./entities/plants.js"
 import { buildEncounterZones, handleTreasureEvent, resetRound } from "./systems/encounters.js"
@@ -66,6 +67,24 @@ let validationQueued = false
 const PREFAB_LAYER_IDLE_DELAY_MS = 2200
 let prefabLayerRenderTimeout = 0
 let prefabLayerRenderedForToken = -1
+const bootOverlay = document.getElementById("bootOverlay")
+const bootStatus = document.getElementById("bootStatus")
+
+function setBootStatus(text){
+    if(bootStatus){
+        bootStatus.textContent = text
+    }
+}
+
+function hideBootOverlay(){
+    if(!bootOverlay){
+        return
+    }
+    bootOverlay.classList.add("boot-hidden")
+    window.setTimeout(() => {
+        bootOverlay.remove()
+    }, 520)
+}
 
 function waitBootFrame(){
     return new Promise(resolve => {
@@ -112,6 +131,7 @@ async function runWorldBootstrapSequence(token){
         return
     }
 
+    setBootStatus("生成地形")
     setRuntimeBoot({active:true, phase:"terrain"})
     await waitBootFrame()
     if(!isBootstrapCurrent(token)){
@@ -119,6 +139,7 @@ async function runWorldBootstrapSequence(token){
     }
     buildTerrain({includeStructures:false})
 
+    setBootStatus("铺设遗迹")
     setRuntimeBoot({active:true, phase:"structures"})
     await waitBootFrame()
     if(!isBootstrapCurrent(token)){
@@ -127,6 +148,7 @@ async function runWorldBootstrapSequence(token){
     buildTerrainStructures()
     terrainBuilt = true
 
+    setBootStatus("绘制池塘")
     setRuntimeBoot({active:true, phase:"background"})
     await waitBootFrame()
     if(!isBootstrapCurrent(token)){
@@ -134,6 +156,7 @@ async function runWorldBootstrapSequence(token){
     }
     renderBackgroundLayer()
 
+    setBootStatus("唤醒草叶")
     setRuntimeBoot({active:true, phase:"bushes"})
     await waitBootFrame()
     if(!isBootstrapCurrent(token)){
@@ -141,12 +164,14 @@ async function runWorldBootstrapSequence(token){
     }
     renderBushLayer()
 
+    setBootStatus("整理前景")
     setRuntimeBoot({active:true, phase:"prefabs"})
     await waitBootFrame()
     if(!isBootstrapCurrent(token)){
         return
     }
 
+    setBootStatus("标记区域")
     setRuntimeBoot({active:true, phase:"overlay"})
     await waitBootFrame()
     if(!isBootstrapCurrent(token)){
@@ -154,6 +179,7 @@ async function runWorldBootstrapSequence(token){
     }
     renderTerrainOverlayLayer()
 
+    setBootStatus("放置宝物")
     setRuntimeBoot({active:true, phase:"encounters"})
     await waitBootFrame()
     if(!isBootstrapCurrent(token)){
@@ -162,6 +188,7 @@ async function runWorldBootstrapSequence(token){
     buildTreasures()
     buildEncounterZones()
 
+    setBootStatus("准备战斗")
     setRuntimeBoot({active:true, phase:"plants"})
     await waitBootFrame()
     if(!isBootstrapCurrent(token)){
@@ -170,6 +197,7 @@ async function runWorldBootstrapSequence(token){
     buildPlants()
     buildBossLair()
 
+    setBootStatus("进入游戏")
     setRuntimeBoot({active:true, phase:"round"})
     await waitBootFrame()
     if(!isBootstrapCurrent(token)){
@@ -179,6 +207,7 @@ async function runWorldBootstrapSequence(token){
     setRuntimeBoot({active:false, phase:"ready"})
     startGameLoop()
     scheduleDeferredPrefabRender(token)
+    hideBootOverlay()
 
     if(!validationQueued){
         validationQueued = true
@@ -436,6 +465,8 @@ async function runCodexValidationFromQuery(){
 
 const canvasElement = document.getElementById("game")
 await loadConfigOverrides()
+setBootStatus("唤醒蛙影")
+await waitForInitialFrogSpriteReady()
 syncPlayerConfigToRuntime(true)
 initializeRuntime(canvasElement)
 setTreasureEventHandler(handleTreasureEvent)

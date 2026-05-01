@@ -14,6 +14,7 @@ const ASSET_VERSION = `?v=${encodeURIComponent(BUILD_ID)}`
 
 function loadSprite(name){
     const image = new Image()
+    image.decoding = "async"
     image.src = `${new URL(name, SPRITE_ROOT).toString()}${ASSET_VERSION}`
     return image
 }
@@ -84,6 +85,56 @@ const spriteMotion = {
 
 function isSpriteReady(image){
     return !!image?.complete && !!image?.naturalWidth
+}
+
+function waitForSpriteReady(image){
+    if(isSpriteReady(image)){
+        return Promise.resolve(true)
+    }
+
+    return new Promise(resolve => {
+        let settled = false
+
+        const finish = ready => {
+            if(settled){
+                return
+            }
+            settled = true
+            image.removeEventListener("load", onLoad)
+            image.removeEventListener("error", onError)
+            resolve(ready)
+        }
+        const onLoad = () => finish(isSpriteReady(image))
+        const onError = () => finish(false)
+
+        image.addEventListener("load", onLoad, {once:true})
+        image.addEventListener("error", onError, {once:true})
+
+        if(image.complete){
+            finish(isSpriteReady(image))
+        }
+    })
+}
+
+function timeoutReady(ms){
+    return new Promise(resolve => {
+        window.setTimeout(() => resolve(false), ms)
+    })
+}
+
+export function isInitialFrogSpriteReady(){
+    return isSpriteReady(spriteImages.idle)
+}
+
+export async function waitForInitialFrogSpriteReady(timeoutMs = 0){
+    if(!timeoutMs || timeoutMs <= 0){
+        return waitForSpriteReady(spriteImages.idle)
+    }
+
+    return Promise.race([
+        waitForSpriteReady(spriteImages.idle),
+        timeoutReady(timeoutMs)
+    ])
 }
 
 function getMoveDirection(){
@@ -645,9 +696,8 @@ function drawProceduralFrog(){
 export function drawFrog(){
     const selection = getSpriteVisualSelection()
     if(!selection){
-        frog.renderState = "procedural"
-        frog.currentSprite = "procedural_fallback"
-        drawProceduralFrog()
+        frog.renderState = "sprite_loading"
+        frog.currentSprite = spriteNames.idle
         return
     }
 
