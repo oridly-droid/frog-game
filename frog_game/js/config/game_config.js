@@ -7,7 +7,7 @@ import { playerConfig } from "./player_config.js"
 import { enemyStats } from "./enemy_config.js"
 
 export const GAME_TITLE = "青蛙乐园 v0.3"
-export const BUILD_ID = "v0.3-build-033"
+export const BUILD_ID = "v0.3-build-032"
 
 export const bushAnchors = [
     {nx:0.12, ny:0.18, scale:1.05},
@@ -33,7 +33,7 @@ export const waveConfigs = [
 ]
 
 export const treasureGoal = 3
-export const maxActiveEnemies = 14
+export const maxActiveEnemies = 10
 export const baseFrogMaxHp = playerConfig.maxHp
 export const BOSS_NAME = "蚁后"
 

@@ -4,7 +4,7 @@
  */
 
 
-import { waveConfigs, encounterTemplates, zoneNames, treasureGoal, enemyStats, maxActiveEnemies } from "../config/game_config.js"
+import { waveConfigs, encounterTemplates, zoneNames, treasureGoal, enemyStats } from "../config/game_config.js"
 import { playerConfig } from "../config/player_config.js"
 import {
     canvas,
@@ -65,14 +65,9 @@ function pickEncounterTemplate(templateIds, rng){
 
 const LEGACY_ENEMY_KEYS = ["ants", "beetles", "chargers", "summoners", "snipers", "spores", "heralds", "guards", "melee", "ranged", "tank"]
 const TERRAIN_SPAWN_PROFILES = {
-    grass:{weights:{melee:1}, densityMultiplier:1.15, powerMultiplier:1},
-    mud:{weights:{melee:0.62, ranged:0.38}, densityMultiplier:1.32, powerMultiplier:1},
-    danger:{weights:{ranged:0.58, tank:0.42}, densityMultiplier:1.72, powerMultiplier:1.22}
-}
-const TERRAIN_PRESSURE_PROFILES = {
-    grass:{triggerZoneCap:3, triggerLocalCap:3, defendReinforceCap:4, huntReinforceCap:3, reinforceInterval:92, waveInterval:168, sustainFloor:3, sustainBudget:1},
-    mud:{triggerZoneCap:4, triggerLocalCap:4, defendReinforceCap:5, huntReinforceCap:4, reinforceInterval:78, waveInterval:148, sustainFloor:4, sustainBudget:2},
-    danger:{triggerZoneCap:5, triggerLocalCap:5, defendReinforceCap:6, huntReinforceCap:5, reinforceInterval:64, waveInterval:132, sustainFloor:5, sustainBudget:2}
+    grass:{weights:{melee:1}, densityMultiplier:1, powerMultiplier:1},
+    mud:{weights:{melee:0.62, ranged:0.38}, densityMultiplier:1, powerMultiplier:1},
+    danger:{weights:{ranged:0.58, tank:0.42}, densityMultiplier:1.35, powerMultiplier:1.22}
 }
 const FIXED_ZONE_TERRAIN_TYPES = {
     [zoneNames.shallows]:"mud",
@@ -86,10 +81,6 @@ const FIXED_ZONE_TERRAIN_TYPES = {
 
 function getTerrainSpawnProfile(terrainType = "grass"){
     return TERRAIN_SPAWN_PROFILES[terrainType] || TERRAIN_SPAWN_PROFILES.grass
-}
-
-function getTerrainPressureProfile(terrainType = "grass"){
-    return TERRAIN_PRESSURE_PROFILES[terrainType] || TERRAIN_PRESSURE_PROFILES.grass
 }
 
 function getEncounterEnemyBudget(config = {}){
@@ -246,17 +237,7 @@ export function spawnConfiguredEnemies(centerX, centerY, radius, config, seed, o
     for(let i = 0; i < (boundConfig.ranged || 0); i++) types.push("ranged")
     for(let i = 0; i < (boundConfig.tank || 0); i++) types.push("tank")
 
-    const openSlots = Math.max(0, maxActiveEnemies - ants.length)
-    if(openSlots <= 0 || types.length === 0){
-        return spawned
-    }
-
-    for(let index = types.length - 1; index > 0; index--){
-        const swapIndex = Math.floor(rng() * (index + 1))
-        ;[types[index], types[swapIndex]] = [types[swapIndex], types[index]]
-    }
-
-    for(const type of types.slice(0, openSlots)){
+    for(const type of types){
         const terrainOverrides = getTerrainEnemyOverrides(type, terrainType)
         const mergedOverrides = {
             ...terrainOverrides,
@@ -294,70 +275,6 @@ export function spawnConfiguredEnemies(centerX, centerY, radius, config, seed, o
 
     ants.push(...spawned)
     return spawned
-}
-
-function pickGlobalSpawnCenter(seed){
-    const rng = mulberry32(seed)
-    let center = null
-
-    for(let attempt = 0; attempt < 36; attempt++){
-        const angle = rng() * Math.PI * 2
-        const point = getBoundaryPoint(angle, 90 + rng() * 70, 1.16 + rng() * 0.18)
-        const x = clamp(point.x, 120, world.width - 120)
-        const y = clamp(point.y, 120, world.height - 120)
-
-        if(Math.hypot(x - frog.x, y - frog.y) < 260) continue
-        if(circleCollidesRocks(x, y, 42)) continue
-
-        center = {x, y}
-        break
-    }
-
-    if(center){
-        return center
-    }
-
-    const angle = rng() * Math.PI * 2
-    const point = getBoundaryPoint(angle, 110, 1.22)
-    return {
-        x: clamp(point.x, 120, world.width - 120),
-        y: clamp(point.y, 120, world.height - 120)
-    }
-}
-
-function getSustainSpawnBudget(terrainType = "grass"){
-    const profile = getTerrainPressureProfile(terrainType)
-    const waveBonus = waveState.current >= 4 ? 1 : 0
-    return Math.min(3, profile.sustainBudget + waveBonus)
-}
-
-function spawnSustainReinforcement(){
-    if(!terrain || isBossBattleInProgress()){
-        return false
-    }
-
-    const terrainType = getTerrainTypeAt(frog.x, frog.y)
-    const openSlots = Math.max(0, maxActiveEnemies - ants.length)
-    if(openSlots <= 0){
-        return false
-    }
-
-    const budget = Math.min(openSlots, getSustainSpawnBudget(terrainType))
-    if(budget <= 0){
-        return false
-    }
-
-    const seed = (((world.width * 71) ^ (world.height * 89) ^ ((waveState.current + 1) * 4099) ^ ((ants.length + 1) * 197) ^ (waveState.pendingTimer * 13)) >>> 0)
-    const center = pickGlobalSpawnCenter(seed)
-    const spawned = spawnConfiguredEnemies(center.x, center.y, 154, {melee:budget}, seed, {}, {terrainType})
-    if(spawned.length === 0){
-        return false
-    }
-
-    spawnHitParticles(center.x, center.y, "#e7f08b", 10)
-    waveState.pendingTimer = getTerrainPressureProfile(terrainType).waveInterval
-    waveState.active = true
-    return true
 }
 
 function splitEncounterConfig(config, divisor){
@@ -416,7 +333,7 @@ export function spawnEncounter(zone){
     const scaledTemplate = getWaveScaledTemplate(zone.template)
     const seed = ((zone.x * 131) ^ (zone.y * 211) ^ Math.floor(zone.spawnSeed * 100000)) >>> 0
     zone.remaining = scaledTemplate.holdTime || 0
-    zone.reinforceTimer = zone.template.reinforceInterval || getTerrainPressureProfile(zone.terrainType).reinforceInterval
+    zone.reinforceTimer = zone.template.reinforceInterval || 90
 
     if(zone.kind === "surround"){
         spawnEncounterByLayout(zone, scaledTemplate, seed)
@@ -522,13 +439,12 @@ function updateEncounterZones(){
             continue
         }
 
-        const pressure = getTerrainPressureProfile(zone.terrainType)
         const playerDist = Math.hypot(frog.x - zone.x, frog.y - zone.y)
         const zoneEnemyCount = ants.filter(enemy => Math.hypot(enemy.x - zone.x, enemy.y - zone.y) < zone.radius + 200).length
         const zonePlantCount = plants.filter(plant => plant.encounterTag === zone.id).length
         const localEnemyCount = ants.filter(enemy => Math.hypot(enemy.x - frog.x, enemy.y - frog.y) < 420).length
 
-        if(!zone.triggered && playerDist < zone.radius * 0.96 && zoneEnemyCount <= pressure.triggerZoneCap && localEnemyCount <= pressure.triggerLocalCap){
+        if(!zone.triggered && playerDist < zone.radius * 0.96 && zoneEnemyCount <= 2 && localEnemyCount <= 2){
             spawnEncounter(zone)
         }
 
@@ -541,9 +457,9 @@ function updateEncounterZones(){
                 zone.remaining = Math.max(0, zone.remaining - 1)
             }
             zone.reinforceTimer -= 1
-            if(zone.reinforceTimer <= 0 && zoneEnemyCount < pressure.defendReinforceCap){
+            if(zone.reinforceTimer <= 0 && zoneEnemyCount < 4){
                 spawnConfiguredEnemies(zone.x, zone.y, zone.radius, {ants:1, chargers:1}, ((zone.x * 43) ^ zone.remaining ^ 0xD311) >>> 0, {}, {terrainType:zone.terrainType})
-                zone.reinforceTimer = pressure.reinforceInterval
+                zone.reinforceTimer = 100
             }
             if(zone.remaining <= 0){
                 completeEncounter(zone)
@@ -551,9 +467,9 @@ function updateEncounterZones(){
         }else if(zone.kind === "hunt"){
             zone.remaining = Math.max(0, zone.remaining - 1)
             zone.reinforceTimer -= 1
-            if(zone.reinforceTimer <= 0 && zoneEnemyCount < pressure.huntReinforceCap){
+            if(zone.reinforceTimer <= 0 && zoneEnemyCount < 3){
                 spawnConfiguredEnemies(frog.x, frog.y, 140, {chargers:1, snipers:1}, ((frog.x * 61) ^ zone.remaining ^ 0xAA51) >>> 0, {}, {terrainType:zone.terrainType})
-                zone.reinforceTimer = Math.max(58, pressure.reinforceInterval + 8)
+                zone.reinforceTimer = 110
             }
             if(zone.remaining <= 0 && zoneEnemyCount === 0){
                 completeEncounter(zone)
@@ -642,17 +558,39 @@ export function spawnGlobalWave(){
         return
     }
 
-    const terrainType = getTerrainTypeAt(frog.x, frog.y)
-    const pressure = getTerrainPressureProfile(terrainType)
     waveState.current += 1
     waveState.index = waveState.current
     waveState.active = true
-    waveState.pendingTimer = pressure.waveInterval
+    waveState.pendingTimer = 240
 
     const config = getGlobalWaveConfig(waveState.current)
     const seed = (((world.width * 37) ^ (world.height * 53) ^ (waveState.current * 9973)) >>> 0)
-    const center = pickGlobalSpawnCenter(seed)
-    spawnConfiguredEnemies(center.x, center.y, 170, config, seed, {}, {terrainType})
+    const rng = mulberry32(seed)
+
+    let center = null
+    for(let attempt = 0; attempt < 36; attempt++){
+        const angle = rng() * Math.PI * 2
+        const point = getBoundaryPoint(angle, 90 + rng() * 70, 1.16 + rng() * 0.18)
+        const x = clamp(point.x, 120, world.width - 120)
+        const y = clamp(point.y, 120, world.height - 120)
+
+        if(Math.hypot(x - frog.x, y - frog.y) < 260) continue
+        if(circleCollidesRocks(x, y, 42)) continue
+
+        center = {x, y}
+        break
+    }
+
+    if(!center){
+        const angle = rng() * Math.PI * 2
+        const point = getBoundaryPoint(angle, 110, 1.22)
+        center = {
+            x: clamp(point.x, 120, world.width - 120),
+            y: clamp(point.y, 120, world.height - 120)
+        }
+    }
+
+    spawnConfiguredEnemies(center.x, center.y, 170, config, seed)
     spawnHitParticles(center.x, center.y, "#ffe88b", 18)
     setBanner(`第 ${waveState.current} 波`, 120)
 }
@@ -839,7 +777,7 @@ export function resetRound(options = {}){
     waveState.index = 0
     waveState.current = 0
     waveState.cleared = 0
-    waveState.pendingTimer = 24
+    waveState.pendingTimer = 30
     waveState.bannerTimer = 0
     waveState.bannerText = ""
     waveState.active = false
@@ -909,7 +847,7 @@ export function handleTreasureEvent(treasure){
         spawnHitParticles(treasure.x, treasure.y - 8, "#ffe88b", 10)
     }
     maybeDropRelic("treasure")
-    waveState.pendingTimer = Math.min(waveState.pendingTimer, 30)
+    waveState.pendingTimer = Math.min(waveState.pendingTimer, 45)
 
     if(getTreasureCount() >= treasureGoal){
         triggerBossEvent()
@@ -932,8 +870,6 @@ export function updateWaves(){
     }
 
     waveState.pendingTimer = Math.max(0, waveState.pendingTimer - 1)
-    const terrainType = getTerrainTypeAt(frog.x, frog.y)
-    const pressure = getTerrainPressureProfile(terrainType)
 
     if(ants.length === 0){
         if(waveState.active){
@@ -952,10 +888,5 @@ export function updateWaves(){
         if(waveState.pendingTimer <= 0){
             spawnGlobalWave()
         }
-        return
-    }
-
-    if(waveState.current > 0 && waveState.pendingTimer <= 0 && ants.length <= Math.min(maxActiveEnemies - 1, pressure.sustainFloor)){
-        spawnSustainReinforcement()
     }
 }
